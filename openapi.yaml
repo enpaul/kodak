@@ -1,0 +1,218 @@
+---
+openapi: "3.0.2"
+info:
+  version: 0.1.0
+  title: ImageMonk
+  description: >-
+    ImageMonk is a simple HTTP server that allows users to upload 
+    images and retrieve them at a later time. In addition, it
+    supports generating (and caching) scaled versions of the 
+    uploaded images for use as thumbnails.
+  license:
+    name: MIT
+    url: https://mit-license.org/
+x-anchors:
+  DefaultHeaders: &headers-default
+    x-imagemonk-version:
+      $ref: "#/components/headers/Version"
+  OptionsResponses: &responses-options
+    '204':
+      description: "Available HTTP verbs in header, per RFC 7231"
+      headers:
+        Allowed:
+          $ref: "#/components/headers/Allowed"
+    '500':
+      $ref: "#/components/responses/InternalServerError"
+paths:
+  /openapi.json:
+    get:
+      summary: Retrieve the OpenAPI specification file
+      operationId: OpenAPI
+      tags: ["meta"]
+      responses:
+        '200':
+          description: Contents of the OpenAPI spec file
+          headers: *headers-default
+          content:
+            application/json:
+              schema:
+                type: object
+  /image/:
+    put:
+      summary: Upload an image to the server
+      operationId: ImageUpload
+      tags: ["image"]
+      responses:
+        '201':
+          description: Image uploaded successfully
+        '406':
+          description: Image is not acceptable for upload
+          headers: *headers-default
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+    options:
+      summary: Retrieve available HTTP verbs for the selected endpoint
+      operationId: ImageUploadOptions
+      tags: ["meta"]
+      responses: *responses-options
+  /image/{image_id}.jpeg:
+    get:
+      summary: Retrieve the image resource with the specified ID
+      operationId: ImageGet
+      tags: ["image"]
+      parameters:
+        - $ref: "#/components/parameters/ImageUUID"
+      responses:
+        '200':
+          description: Image content for provided ID
+          headers: *headers-default
+          content:
+            image/jpeg: {}
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '410':
+          $ref: "#/components/responses/DeletedError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+    delete:
+      summary: Delete an image from the server
+      operationId: ImageDelete
+      tags: ["image"]
+      parameters:
+        - $ref: "#/components/parameters/ImageUUID"
+      responses:
+        '204':
+          description: Image with provided ID successfully deleted
+          headers: *headers-default
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '410':
+          $ref: "#/components/responses/DeletedError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+    options:
+      summary: Retrieve available HTTP verbs for the selected endpoint
+      operationId: ImageOptions
+      tags: ["meta"]
+      parameters:
+        - $ref: "#/components/parameters/ImageUUID"
+      responses: *responses-options
+  /thumb/{image_id}/scale/{scale_width}.jpeg:
+    get:
+      summary: Fetch a scaled thumbnail image
+      operationId: ThumbnailScale
+      tags: ["thumbnail"]
+      parameters:
+        - $ref: "#/components/parameters/ImageUUID"
+        - name: scale_width
+          in: path
+          description: Width in pixels to scale the image to
+          required: true
+          schema:
+            type: number
+            format: integer
+      responses:
+        '200':
+          description: Scaled image thumbnail content
+          headers: *headers-default
+          content:
+            image/jpeg: {}
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '410':
+          $ref: "#/components/responses/DeletedError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+  /thumb/{image_id}/size/{width}x{height}.jpeg:
+    get:
+      summary: Fetch a thumbnail image with specific dimensions
+      operationId: ThumbnailDimension
+      tags: ["thumbnail"]
+      parameters:
+        - $ref: "#/components/parameters/ImageUUID"
+        - name: width
+          in: path
+          description: Width in pixels of the image thumbnail
+          required: true
+          schema:
+            type: number
+            format: integer
+        - name: height
+          in: path
+          description: Height in pixels of the image thumbnail
+          required: true
+          schema:
+            type: number
+            format: integer
+      responses:
+        '200':
+          description: Scaled thumbnail image of specified dimentions
+          headers: *headers-default
+          content:
+            image/jpeg: {}
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '410':
+          $ref: "#/components/responses/DeletedError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        event_id:
+          type: string
+          format: uuid
+        message:
+          type: string
+        data:
+          type: object
+      example:
+        event_id: 0de388ae-8277-49ba-b225-3ef7f5b9d084
+        message: An error ocurred in a backend component
+        data: {}
+  headers:
+    Version:
+      description: Keyosk server application version
+      schema:
+        type: string
+    Allowed:
+      description: Comma delimited list of valid HTTP verbs
+      schema:
+        type: string
+  parameters:
+    ImageUUID:
+      name: image_id
+      in: path
+      description: Image resource UUID
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    InternalServerError:
+      description: Internal server error
+      headers: *headers-default
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotFoundError:
+      description: Image with provided ID does not exist
+      headers: *headers-default
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    DeletedError:
+      description: Image with provided ID was deleted
+      headers: *headers-default
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
