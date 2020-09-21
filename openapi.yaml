@@ -38,7 +38,7 @@ paths:
               schema:
                 type: object
   /image/:
-    put:
+    post:
       summary: Upload an image to the server
       operationId: ImageUpload
       tags: ["image"]
@@ -47,6 +47,13 @@ paths:
           description: Image uploaded successfully
         '406':
           description: Image is not acceptable for upload
+          headers: *headers-default
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '413':
+          description: Image is too large for upload
           headers: *headers-default
           content:
             application/json:
