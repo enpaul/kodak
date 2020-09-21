@@ -1,26 +1,20 @@
-import flask_restful
+from imagemonk.resources._shared import ImageMonkResource
 
 
-class ImageUpload(flask_restful.Resource):
+class ImageUpload(ImageMonkResource):
 
-    route = "/image/"
+    route = ("/image/",)
 
-    def put(self):
-        raise NotImplementedError
-
-    def options(self):
+    def post(self):
         raise NotImplementedError
 
 
-class Image(flask_restful.Resource):
+class Image(ImageMonkResource):
 
-    route = "/image/<string:image_id>.jpg"
+    route = ("/image/<string:image_id>.jpg",)
 
     def get(self, image_id: str):
         raise NotImplementedError
 
     def delete(self, image_id: str):
-        raise NotImplementedError
-
-    def options(self, image_id: str):
         raise NotImplementedError

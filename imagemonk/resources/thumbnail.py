@@ -1,17 +1,17 @@
-import flask_restful
+from imagemonk.resources._shared import ImageMonkResource
 
 
-class ThumbnailScale(flask_restful.Resource):
+class ThumbnailScale(ImageMonkResource):
 
-    route = "/thumb/<string:image_id>/scale/<integer:scale_width>.jpg"
+    routes = ("/thumb/<string:image_id>/scale/<int:scale_width>.jpg",)
 
     def get(self, image_id: str, scale_width: int):
         raise NotImplementedError
 
 
-class ThumbnailResize(flask_restful.Resource):
+class ThumbnailResize(ImageMonkResource):
 
-    route = "/thumb/<string:image_id>/size/<integer:width>x<integer:height>.jpg"
+    routes = ("/thumb/<string:image_id>/size/<int:width>x<int:height>.jpg",)
 
     def get(self, image_id: str, width: int, height: int):
         raise NotImplementedError

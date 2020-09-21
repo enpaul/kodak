@@ -1,12 +1,16 @@
 from pathlib import Path
 
-import flask_restful
 from ruamel.yaml import YAML
+
+from imagemonk.resources._shared import ImageMonkResource
 
 yaml = YAML(typ="safe")
 
 
-class OpenAPI(flask_restful.Resource):
+class OpenAPI(ImageMonkResource):
+
+    routes = ("/openapi.json",)
+
     def get(self):
 
         with (Path(__file__).parent, "openapi.yaml").open() as infile:
