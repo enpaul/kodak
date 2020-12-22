@@ -11,25 +11,22 @@ help: ## List Makefile targets
 	$(info Makefile documentation)
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-10s\033[0m %s\n", $$1, $$2}'
 
-tox: clean
-	tox
-
 clean-tox:
-	rm -rf ./.mypy_cache
-	rm -rf ./.tox
-	rm -f .coverage
-	find ./tests -type d -name __pycache__ -prune -exec rm -rf {} \;
+	rm --recursive --force ./.mypy_cache
+	rm --recursive --force ./.tox
+	rm --force .coverage
+	find ./tests -type d -name __pycache__ -prune -exec rm --recursive --force {} \;
 
 clean-py:
-	rm -rf ./dist
-	rm -rf ./build
-	rm -rf ./*.egg-info
-	find ./$(PROJECT) -type d -name __pycache__ -prune -exec rm -rf {} \;
+	rm --recursive --force ./dist
+	rm --recursive --force ./build
+	rm --recursive --force ./*.egg-info
+	find ./$(PROJECT) -type d -name __pycache__ -prune -exec rm --recursive --force {} \;
 
 clean-docs:
-	rm -rf docs/_build
-	rm -f docs/$(PROJECT)*.rst
-	rm -f docs/modules.rst
+	rm --recursive --force docs/_build
+	rm --force docs/$(PROJECT)*.rst
+	rm --force docs/modules.rst
 
 clean: clean-tox clean-py clean-docs; ## Clean temp build/cache files and directories
 
@@ -39,8 +36,11 @@ wheel: ## Build Python binary distribution wheel package
 source: ## Build Python source distribution package
 	poetry build --format sdist
 
-test: ## Run the project testsuite(s)
-	poetry run tox -r
+test: clean-tox ## Run the project testsuite(s)
+	tox
 
-docs: ## Build the documentation using Sphinx
-	poetry run tox -e docs
+publish: clean test wheel source ## Build and upload to pypi (requires $PYPI_API_KEY be set)
+	@poetry publish --username __token__ --password $(PYPI_API_KEY)
+
+docs: clean-docs ## Build the documentation using Sphinx
+	tox -e docs
