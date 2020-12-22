@@ -5,8 +5,35 @@ license = "MIT"
 authors = ["Ethan Paul <24588726+enpaul@users.noreply.github.com>"]
 description = "HTTP server for uploading images and generating thumbnails"
 repository = "https://github.com/mocproject/imagemonk/"
-packages = [{include = "imagemonk"}]
-include = ["imagemonk/py.typed"]
+packages = [
+  {include = "imagemonk"},
+  {include = "tests", format = "sdist"}
+]
+include = [
+  "imagemonk/py.typed"
+]
+keywords = ["flask", "image", "thumbnail", "hosting"]
+readme = "README.md"
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Environment :: Web Environment",
+  "Framework :: Flask",
+  "Intended Audience :: Developers",
+  "Intended Audience :: System Administrators",
+  "Intended Audience :: Information Technology",
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+  "Topic :: Multimedia :: Graphics",
+  "Topic :: Multimedia :: Graphics :: Graphics Conversion"
+]
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -30,5 +57,5 @@ toml = "^0.10.1"
 tox = "^3.20.0"
 
 [build-system]
-requires = ["poetry>=1.0.0"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
