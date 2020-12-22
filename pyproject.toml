@@ -6,6 +6,7 @@ authors = ["Ethan Paul <24588726+enpaul@users.noreply.github.com>"]
 description = "HTTP server for uploading images and generating thumbnails"
 repository = "https://github.com/mocproject/imagemonk/"
 packages = [{include = "imagemonk"}]
+include = ["imagemonk/py.typed"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
