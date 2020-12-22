@@ -1,8 +1,9 @@
 [tool.poetry]
 name = "imagemonk"
 version = "0.0.0"
+license = "MIT"
+authors = ["Ethan Paul <24588726+enpaul@users.noreply.github.com>"]
 description = "HTTP server for uploading images and generating thumbnails"
-authors = ["Ethan Paul <e@enp.one>"]
 repository = "https://github.com/mocproject/imagemonk/"
 packages = [{include = "imagemonk"}]
 
@@ -12,18 +13,20 @@ python = "^3.7"
 [tool.poetry.dev-dependencies]
 bandit = "^1.6.2"
 black = { git = "https://github.com/psf/black.git" }
+blacken-docs = "^1.9.1"
 ipython = "^7.10.2"
-mypy = "^0.782"
+mypy = "^0.790"
 pre-commit = "^2.1.1"
-pylint = "^2.4.4"
+pre-commit-hooks = "^3.4.0"
+pylint = "^2.6.0"
 pytest = "^5.2.0"
 pytest-cov = "^2.8.0"
-reorder-python-imports = "^1.8.0"
+reorder-python-imports = "^2.3.0"
 safety = "^1.9.0"
-sphinx = "^3.0.4"
-sphinx-autodoc-typehints = "^1.8.0"
+sphinx = "^3.3.0"
+sphinx-autodoc-typehints = "^1.11.1"
 toml = "^0.10.1"
-tox = "^3.14.0"
+tox = "^3.20.0"
 
 [build-system]
 requires = ["poetry>=1.0.0"]
