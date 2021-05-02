@@ -7,7 +7,7 @@ class SupportedDatabaseBackend(enum.Enum):
     SQLITE = enum.auto()
 
 
-HTTP_HEADER_RESPONSE_VERSION = "x-imagemonk-version"
+HTTP_HEADER_RESPONSE_VERSION = "x-dehance-version"
 
 HTTP_HEADER_RESPONSE_DIGEST = "Digest"
 

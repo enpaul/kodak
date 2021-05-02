@@ -1,7 +1,7 @@
-from imagemonk.resources._shared import ImageMonkResource
+from dehance.resources._shared import DehanceResource
 
 
-class ThumbnailScale(ImageMonkResource):
+class ThumbnailScale(DehanceResource):
 
     routes = ("/thumb/<string:image_id>/scale/<int:scale_width>.jpg",)
 
@@ -9,7 +9,7 @@ class ThumbnailScale(ImageMonkResource):
         raise NotImplementedError
 
 
-class ThumbnailResize(ImageMonkResource):
+class ThumbnailResize(DehanceResource):
 
     routes = ("/thumb/<string:image_id>/size/<int:width>x<int:height>.jpg",)
 

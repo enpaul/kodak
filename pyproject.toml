@@ -1,17 +1,17 @@
 [tool.poetry]
-name = "imagemonk"
+name = "dehance"
 version = "0.1.0"
 license = "MIT"
 authors = ["Ethan Paul <24588726+enpaul@users.noreply.github.com>"]
 description = "HTTP server for uploading images and generating thumbnails"
-repository = "https://github.com/mocproject/imagemonk/"
+repository = "https://github.com/mocproject/dehance/"
 packages = [
-  {include = "imagemonk"},
+  {include = "dehance"},
   {include = "tests", format = "sdist"}
 ]
 include = [
-  "imagemonk/py.typed",
-  "imagemonk/resources/openapi.yaml"
+  "dehance/py.typed",
+  "dehance/resources/openapi.yaml"
 ]
 keywords = ["flask", "image", "thumbnail", "hosting"]
 readme = "README.md"
@@ -45,10 +45,10 @@ peewee = "^3.13.3"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.6.2"
-black = { git = "https://github.com/psf/black.git" }
+black = "^21.4b2"
 blacken-docs = "^1.9.1"
 ipython = "^7.10.2"
-mypy = "^0.790"
+mypy = "^0.800"
 pre-commit = "^2.1.1"
 pre-commit-hooks = "^3.4.0"
 pylint = "^2.6.0"
@@ -60,7 +60,9 @@ sphinx = "^3.3.0"
 sphinx-autodoc-typehints = "^1.11.1"
 toml = "^0.10.1"
 tox = "^3.20.0"
-tox-poetry-installer = {extras = ["poetry"], version = "^0.6.1"}
+tox-poetry-installer = {extras = ["poetry"], version = "^0.7.0"}
+mdformat = "^0.6"
+mdformat-gfm = "^0.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

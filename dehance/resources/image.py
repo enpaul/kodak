@@ -4,13 +4,13 @@ import uuid
 
 import flask
 
-from imagemonk import constants
-from imagemonk import database
-from imagemonk import exceptions
-from imagemonk.resources._shared import ImageMonkResource
+from dehance import constants
+from dehance import database
+from dehance import exceptions
+from dehance.resources._shared import DehanceResource
 
 
-class ImageUpload(ImageMonkResource):
+class ImageUpload(DehanceResource):
 
     routes = ("/image/",)
 
@@ -19,8 +19,6 @@ class ImageUpload(ImageMonkResource):
             raise
 
         uploaded = flask.request.files["image"]
-
-        breakpoint()
 
         if not uploaded.filename:
             raise
@@ -47,16 +45,14 @@ class ImageUpload(ImageMonkResource):
         return None, 201
 
 
-class Image(ImageMonkResource):
+class Image(DehanceResource):
 
     routes = ("/image/<string:image_id>.jpeg",)
 
     def get(self, image_id: str):
 
         image = database.ImageRecord.get(
-            database.ImageRecord.uuid
-            == uuid.UUID(image_id) & database.ImageRecord.format
-            == format
+            database.ImageRecord.uuid == uuid.UUID(image_id)
         )
 
         if image.deleted:

@@ -1,7 +1,7 @@
-# ImageMonk makefile
+# Dehance makefile
 
 # You can set these variables from the command line
-PROJECT = imagemonk
+PROJECT = dehance
 
 .PHONY: help
 # Put it first so that "make" without argument is like "make help"
@@ -28,7 +28,8 @@ clean-docs:
 	rm --force docs/$(PROJECT)*.rst
 	rm --force docs/modules.rst
 
-clean: clean-tox clean-py clean-docs; ## Clean temp build/cache files and directories
+clean: clean-tox clean-py clean-docs ## Clean temp build/cache files and directories
+	rm --force ./*db*
 
 wheel: ## Build Python binary distribution wheel package
 	poetry build --format wheel
@@ -37,10 +38,10 @@ source: ## Build Python source distribution package
 	poetry build --format sdist
 
 test: clean-tox ## Run the project testsuite(s)
-	tox
+	poetry run tox --parallelize-locked-install=10
 
 publish: clean test wheel source ## Build and upload to pypi (requires $PYPI_API_KEY be set)
 	@poetry publish --username __token__ --password $(PYPI_API_KEY)
 
 docs: clean-docs ## Build the documentation using Sphinx
-	tox -e docs
+	poetry run tox -e docs

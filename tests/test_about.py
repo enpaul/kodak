@@ -3,7 +3,7 @@ from pathlib import Path
 
 import toml
 
-from imagemonk import __about__
+from dehance import __about__
 
 
 def test_about():

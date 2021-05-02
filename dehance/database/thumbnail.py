@@ -1,10 +1,10 @@
 import peewee
 
-from imagemonk.database._shared import ImageMonkModel
-from imagemonk.database.image import ImageRecord
+from dehance.database._shared import DehanceModel
+from dehance.database.image import ImageRecord
 
 
-class ThumbnailRecord(ImageMonkModel):
+class ThumbnailRecord(DehanceModel):
 
     parent = peewee.ForeignKeyField(ImageRecord)
     width = peewee.IntegerField(null=False)

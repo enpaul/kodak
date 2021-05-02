@@ -2,9 +2,9 @@
 openapi: "3.0.2"
 info:
   version: 0.1.0
-  title: ImageMonk
+  title: Dehance
   description: >-
-    ImageMonk is a simple HTTP server that allows users to upload
+    Dehance is a simple HTTP server that allows users to upload
     images and retrieve them at a later time. In addition, it
     supports generating (and caching) scaled versions of the
     uploaded images for use as thumbnails.
@@ -13,7 +13,7 @@ info:
     url: https://mit-license.org/
 x-anchors:
   DefaultHeaders: &headers-default
-    x-imagemonk-version:
+    x-dehance-version:
       $ref: "#/components/headers/Version"
   OptionsResponses: &responses-options
     '204':

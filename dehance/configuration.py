@@ -8,7 +8,7 @@ from typing import Dict
 from typing import Optional
 from typing import Tuple
 
-from imagemonk import constants
+from dehance import constants
 
 
 def _default_sqlite_pragmas() -> Dict[str, Any]:
@@ -31,7 +31,7 @@ def _default_sqlite_pragmas() -> Dict[str, Any]:
 
 @dataclass
 class _DBSqliteConfig:
-    path: Path = Path.cwd() / "imagemonk.db"
+    path: Path = Path.cwd() / "dehance.db"
     pragmas: Dict[str, Any] = field(default_factory=_default_sqlite_pragmas)
 
     @classmethod
@@ -51,7 +51,7 @@ class _DBMariaConfig:
     username: str = "root"
     password: Optional[str] = None
     port: int = 3306
-    schema: str = "imagemonk"
+    schema: str = "dehance"
 
     @classmethod
     def build(cls):
@@ -106,7 +106,7 @@ class _UploadConfig:
 
 
 @dataclass
-class ImageMonkConfig:
+class DehanceConfig:
     database: _DBConfig = field(default_factory=_DBConfig.build)
     upload: _UploadConfig = field(default_factory=_UploadConfig.build)
     storage_path: Path = Path.cwd()
@@ -120,6 +120,6 @@ class ImageMonkConfig:
         )
 
 
-def load() -> ImageMonkConfig:
+def load() -> DehanceConfig:
 
-    return ImageMonkConfig.build()
+    return DehanceConfig.build()

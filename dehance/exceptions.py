@@ -2,13 +2,13 @@
 
 ::
 
-  ImageMonkException
+  DehanceException
    +-- ClientError
    +-- ServerError
 """
 
 
-class ImageMonkException(Exception):
+class DehanceException(Exception):
     """Whomp whomp, something went wrong
 
     But seriously, don't ever raise this exception
@@ -17,7 +17,7 @@ class ImageMonkException(Exception):
     status: int
 
 
-class ClientError(ImageMonkException):
+class ClientError(DehanceException):
     """Error while processing client side input"""
 
     status = 400
@@ -29,7 +29,7 @@ class ImageResourceDeletedError(ClientError):
     status = 410
 
 
-class ServerError(ImageMonkException):
+class ServerError(DehanceException):
     """Error while processing server side data"""
 
     status = 500

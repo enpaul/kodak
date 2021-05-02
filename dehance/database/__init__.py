@@ -3,18 +3,18 @@ from typing import Tuple
 
 import peewee
 
-from imagemonk import constants
-from imagemonk.configuration import ImageMonkConfig
-from imagemonk.database._shared import ImageMonkModel
-from imagemonk.database._shared import INTERFACE as interface
-from imagemonk.database.image import ImageRecord
-from imagemonk.database.thumbnail import ThumbnailRecord
+from dehance import constants
+from dehance.configuration import DehanceConfig
+from dehance.database._shared import DehanceModel
+from dehance.database._shared import INTERFACE as interface
+from dehance.database.image import ImageRecord
+from dehance.database.thumbnail import ThumbnailRecord
 
 
-MODELS: Tuple[ImageMonkModel, ...] = (ImageRecord, ThumbnailRecord)
+MODELS: Tuple[DehanceModel, ...] = (ImageRecord, ThumbnailRecord)
 
 
-def initialize(config: ImageMonkConfig):
+def initialize(config: DehanceConfig):
     """Initialize the database interface
 
     Defining the database as an

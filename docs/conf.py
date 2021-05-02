@@ -7,18 +7,19 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
+import datetime
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.resolve()
 ABOUT = {}
-with open(Path(BASE_DIR, "..", "imagemonk", "__about__.py")) as infile:
+with open(Path(BASE_DIR, "..", "dehance", "__about__.py")) as infile:
     exec(infile.read(), ABOUT)
 
 
 # -- Project information -----------------------------------------------------
 
 project = ABOUT["__title__"]
-copyright = "2020"
+copyright = str(datetime.date.today().year)
 author = ", ".join(ABOUT["__authors__"])
 
 # The full version, including alpha/beta/rc tags

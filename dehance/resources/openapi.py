@@ -2,12 +2,12 @@ from pathlib import Path
 
 from ruamel.yaml import YAML
 
-from imagemonk.resources._shared import ImageMonkResource
+from dehance.resources._shared import DehanceResource
 
 yaml = YAML(typ="safe")
 
 
-class OpenAPI(ImageMonkResource):
+class OpenAPI(DehanceResource):
 
     routes = ("/openapi.json",)
 
