@@ -1,11 +1,11 @@
-Dehance
+ImageMuck
 =========
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   API Reference <dehance>
+   API Reference <imagemuck>
 
 
 

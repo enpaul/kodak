@@ -16,7 +16,7 @@ dist/
 
 docs/_build/
 docs/modules.rst
-docs/dehance*.rst
+docs/imagemuck*.rst
 
 .vscode/
 .idea/

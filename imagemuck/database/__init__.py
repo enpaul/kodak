@@ -3,18 +3,18 @@ from typing import Tuple
 
 import peewee
 
-from dehance import constants
-from dehance.configuration import DehanceConfig
-from dehance.database._shared import DehanceModel
-from dehance.database._shared import INTERFACE as interface
-from dehance.database.image import ImageRecord
-from dehance.database.thumbnail import ThumbnailRecord
+from imagemuck import constants
+from imagemuck.configuration import ImageMuckConfig
+from imagemuck.database._shared import ImageMuckModel
+from imagemuck.database._shared import INTERFACE as interface
+from imagemuck.database.image import ImageRecord
+from imagemuck.database.thumbnail import ThumbnailRecord
 
 
-MODELS: Tuple[DehanceModel, ...] = (ImageRecord, ThumbnailRecord)
+MODELS: Tuple[ImageMuckModel, ...] = (ImageRecord, ThumbnailRecord)
 
 
-def initialize(config: DehanceConfig):
+def initialize(config: ImageMuckConfig):
     """Initialize the database interface
 
     Defining the database as an

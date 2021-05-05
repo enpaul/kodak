@@ -4,10 +4,10 @@ from typing import List
 
 import peewee
 
-from dehance.database._shared import DehanceModel
+from imagemuck.database._shared import ImageMuckModel
 
 
-class ImageRecord(DehanceModel):
+class ImageRecord(ImageMuckModel):
     """Database record for"""
 
     width = peewee.IntegerField(null=False)

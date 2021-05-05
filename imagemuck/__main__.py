@@ -1,12 +1,12 @@
 """Development server stub entrypoint
 
-Flask comes with a built-in development server. This entrypoint allows ``dehance``
+Flask comes with a built-in development server. This entrypoint allows ``imagemuck``
 to be run directly to run the development server and expose some simple config options for ease of
 access. Run the below command to start the server:
 
 ::
 
-  python -m dehance
+  python -m imagemuck
 
 In addition to the helpful CLI flags, the Flask development server run by this module will also
 load any ``.env`` files in the current working directory when running the application.
@@ -17,7 +17,7 @@ load any ``.env`` files in the current working directory when running the applic
 import argparse
 import sys
 
-from dehance.application import APPLICATION
+from imagemuck.application import APPLICATION
 
 
 # pylint: disable=invalid-name

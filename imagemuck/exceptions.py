@@ -2,13 +2,13 @@
 
 ::
 
-  DehanceException
+  ImageMuckException
    +-- ClientError
    +-- ServerError
 """
 
 
-class DehanceException(Exception):
+class ImageMuckException(Exception):
     """Whomp whomp, something went wrong
 
     But seriously, don't ever raise this exception
@@ -17,7 +17,7 @@ class DehanceException(Exception):
     status: int
 
 
-class ClientError(DehanceException):
+class ClientError(ImageMuckException):
     """Error while processing client side input"""
 
     status = 400
@@ -29,7 +29,7 @@ class ImageResourceDeletedError(ClientError):
     status = 410
 
 
-class ServerError(DehanceException):
+class ServerError(ImageMuckException):
     """Error while processing server side data"""
 
     status = 500

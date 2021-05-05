@@ -1,12 +1,12 @@
 import flask_restful
 
-from dehance import resources
-from dehance._server import DehanceFlask
-from dehance._server import initialize_database
-from dehance._server import make_the_tea
+from imagemuck import resources
+from imagemuck._server import ImageMuckFlask
+from imagemuck._server import initialize_database
+from imagemuck._server import make_the_tea
 
 
-APPLICATION = DehanceFlask(__name__)
+APPLICATION = ImageMuckFlask(__name__)
 API = flask_restful.Api(APPLICATION, catch_all_404s=True)
 
 

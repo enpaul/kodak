@@ -4,13 +4,13 @@ import uuid
 
 import flask
 
-from dehance import constants
-from dehance import database
-from dehance import exceptions
-from dehance.resources._shared import DehanceResource
+from imagemuck import constants
+from imagemuck import database
+from imagemuck import exceptions
+from imagemuck.resources._shared import ImageMuckResource
 
 
-class ImageUpload(DehanceResource):
+class ImageUpload(ImageMuckResource):
 
     routes = ("/image/",)
 
@@ -45,7 +45,7 @@ class ImageUpload(DehanceResource):
         return None, 201
 
 
-class Image(DehanceResource):
+class Image(ImageMuckResource):
 
     routes = ("/image/<string:image_id>.jpeg",)
 

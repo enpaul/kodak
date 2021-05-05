@@ -1,4 +1,4 @@
-# dehance
+# imagemuck
 
 HTTP server for handling image uploads and thumbnail generation.
 

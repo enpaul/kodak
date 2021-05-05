@@ -32,7 +32,7 @@ repos:
         name: reorder-python-imports
         entry: reorder-python-imports
         args:
-          - "--unclassifiable-application-module=dehance"
+          - "--unclassifiable-application-module=imagemuck"
         language: system
         types: [python]
 

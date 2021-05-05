@@ -1,7 +1,7 @@
-# Dehance makefile
+# ImageMuck makefile
 
 # You can set these variables from the command line
-PROJECT = dehance
+PROJECT = imagemuck
 
 .PHONY: help
 # Put it first so that "make" without argument is like "make help"

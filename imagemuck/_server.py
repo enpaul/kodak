@@ -1,11 +1,11 @@
 import flask
 
-from dehance import __about__
-from dehance import configuration
-from dehance import constants
-from dehance import database
-from dehance import exceptions
-from dehance.resources import ResponseHeaders
+from imagemuck import __about__
+from imagemuck import configuration
+from imagemuck import constants
+from imagemuck import database
+from imagemuck import exceptions
+from imagemuck.resources import ResponseHeaders
 
 
 def make_the_tea() -> None:
@@ -23,7 +23,7 @@ def initialize_database() -> None:
     database.initialize(flask.current_app.appconfig)
 
 
-class DehanceRequest(flask.Request):
+class ImageMuckRequest(flask.Request):
     """Extend the default Flask request object to add custom application state settings"""
 
     def make_response_headers(self) -> ResponseHeaders:
@@ -40,14 +40,14 @@ class DehanceRequest(flask.Request):
         }
 
 
-class DehanceFlask(flask.Flask):
+class ImageMuckFlask(flask.Flask):
     """Extend the default Flask object to add the custom application config
 
     There's probably an easier/more kosher way to do this, but ¯\\_(ツ)_/¯
     """
 
-    request_class = DehanceRequest
+    request_class = ImageMuckRequest
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.appconfig: configuration.DehanceConfig = configuration.load()
+        self.appconfig: configuration.ImageMuckConfig = configuration.load()
