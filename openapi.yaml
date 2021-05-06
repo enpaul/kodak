@@ -4,10 +4,10 @@ info:
   version: 0.1.0
   title: ImageMuck
   description: >-
-    ImageMuck is a simple HTTP server that allows users to upload
-    images and retrieve them at a later time. In addition, it
-    supports generating (and caching) scaled versions of the
-    uploaded images for use as thumbnails.
+    A simple HTTP service for mucking about with images. This is a super basic HTTP
+    service for autogenerating website ready banner and preview images from full-size
+    source images. The generated images are automatically cached with deterministic
+    URLs.
   license:
     name: MIT
     url: https://mit-license.org/
@@ -37,16 +37,48 @@ paths:
             application/json:
               schema:
                 type: object
-  /image/:
+  /image/{image_name}.{format}:
+    get:
+      summary: Retrieve the image resource with the specified ID
+      operationId: ImageGet
+      tags: ["image"]
+      parameters:
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
+      responses:
+        '200':
+          description: Image content for provided ID
+          headers: *headers-default
+          content:
+            image/jpeg: {}
+            image/png: {}
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '410':
+          $ref: "#/components/responses/DeletedError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
     post:
       summary: Upload an image to the server
       operationId: ImageUpload
       tags: ["image"]
+      parameters:
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
       responses:
         '201':
           description: Image uploaded successfully
+        '405':
+          $ref: "#/components/responses/MethodNotAllowedError"
         '406':
           description: Image is not acceptable for upload
+          headers: *headers-default
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '409':
+          description: Image with provided ID already exists
           headers: *headers-default
           content:
             application/json:
@@ -61,42 +93,21 @@ paths:
                 $ref: "#/components/schemas/Error"
         '500':
           $ref: "#/components/responses/InternalServerError"
-    options:
-      summary: Retrieve available HTTP verbs for the selected endpoint
-      operationId: ImageUploadOptions
-      tags: ["meta"]
-      responses: *responses-options
-  /image/{image_id}.jpeg:
-    get:
-      summary: Retrieve the image resource with the specified ID
-      operationId: ImageGet
-      tags: ["image"]
-      parameters:
-        - $ref: "#/components/parameters/ImageUUID"
-      responses:
-        '200':
-          description: Image content for provided ID
-          headers: *headers-default
-          content:
-            image/jpeg: {}
-        '404':
-          $ref: "#/components/responses/NotFoundError"
-        '410':
-          $ref: "#/components/responses/DeletedError"
-        '500':
-          $ref: "#/components/responses/InternalServerError"
     delete:
       summary: Delete an image from the server
       operationId: ImageDelete
-      tags: ["image"]
+      tags: ["image", "manipulate"]
       parameters:
-        - $ref: "#/components/parameters/ImageUUID"
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
       responses:
         '204':
           description: Image with provided ID successfully deleted
           headers: *headers-default
         '404':
           $ref: "#/components/responses/NotFoundError"
+        '405':
+          $ref: "#/components/responses/MethodNotAllowedError"
         '410':
           $ref: "#/components/responses/DeletedError"
         '500':
@@ -106,67 +117,77 @@ paths:
       operationId: ImageOptions
       tags: ["meta"]
       parameters:
-        - $ref: "#/components/parameters/ImageUUID"
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
       responses: *responses-options
-  /thumb/{image_id}/scale/{scale_width}.jpeg:
+  /image/{image_name}/{dimension}-{value}.{format}:
     get:
-      summary: Fetch a scaled thumbnail image
+      summary: Fetch a scaled image
       operationId: ThumbnailScale
-      tags: ["thumbnail"]
+      tags: ["manipulate"]
       parameters:
-        - $ref: "#/components/parameters/ImageUUID"
-        - name: scale_width
-          in: path
-          description: Width in pixels to scale the image to
-          required: true
-          schema:
-            type: number
-            format: integer
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
+        - $ref: "#/components/parameters/ImageScaleDimension"
+        - $ref: "#/components/parameters/ImageScaleValue"
       responses:
         '200':
           description: Scaled image thumbnail content
           headers: *headers-default
           content:
             image/jpeg: {}
+            image/png: {}
         '404':
           $ref: "#/components/responses/NotFoundError"
         '410':
           $ref: "#/components/responses/DeletedError"
         '500':
           $ref: "#/components/responses/InternalServerError"
-  /thumb/{image_id}/size/{width}x{height}.jpeg:
-    get:
-      summary: Fetch a thumbnail image with specific dimensions
-      operationId: ThumbnailDimension
-      tags: ["thumbnail"]
+    options:
+      summary: Retrieve available HTTP verbs for the selected endpoint
+      operationId: ImageScaleOptions
+      tags: ["meta"]
       parameters:
-        - $ref: "#/components/parameters/ImageUUID"
-        - name: width
-          in: path
-          description: Width in pixels of the image thumbnail
-          required: true
-          schema:
-            type: number
-            format: integer
-        - name: height
-          in: path
-          description: Height in pixels of the image thumbnail
-          required: true
-          schema:
-            type: number
-            format: integer
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
+        - $ref: "#/components/parameters/ImageScaleDimension"
+        - $ref: "#/components/parameters/ImageScaleValue"
+      responses: *responses-options
+  /image/{image_name}/{anchor}-{width}x{height}.{format}:
+    get:
+      summary: Fetch a cropped version of the image
+      operationId: ImageCrop
+      tags: ["manipulate"]
+      parameters:
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
+        - $ref: "#/components/parameters/ImageCropAnchor"
+        - $ref: "#/components/parameters/ImageCropWidth"
+        - $ref: "#/components/parameters/ImageCropHeight"
       responses:
         '200':
           description: Scaled thumbnail image of specified dimentions
           headers: *headers-default
           content:
             image/jpeg: {}
+            image/png: {}
         '404':
           $ref: "#/components/responses/NotFoundError"
         '410':
           $ref: "#/components/responses/DeletedError"
         '500':
           $ref: "#/components/responses/InternalServerError"
+    options:
+      summary: Retrieve available HTTP verbs for the selected endpoint
+      operationId: ImageCropOptions
+      tags: ["meta"]
+      parameters:
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
+        - $ref: "#/components/parameters/ImageCropAnchor"
+        - $ref: "#/components/parameters/ImageCropWidth"
+        - $ref: "#/components/parameters/ImageCropHeight"
+      responses: *responses-options
 components:
   schemas:
     Error:
@@ -193,14 +214,61 @@ components:
       schema:
         type: string
   parameters:
-    ImageUUID:
-      name: image_id
+    ImageName:
+      name: image_name
       in: path
-      description: Image resource UUID
+      description: Image resource name
       required: true
       schema:
         type: string
-        format: uuid
+    ImageFormat:
+      name: format
+      in: path
+      description: Image format extension
+      required: true
+      schema:
+        type: string
+        enum: [jpg, jpeg, png]
+    ImageScaleDimension:
+      name: dimension
+      in: path
+      description: Which dimension to scale to the provided dimension
+      required: true
+      schema:
+        type: string
+        enum: ["w", "h"]
+    ImageScaleValue:
+      name: value
+      in: path
+      description: Dimension in pixels to scale the image to
+      required: true
+      schema:
+        type: number
+        format: integer
+    ImageCropAnchor:
+      name: anchor
+      in: path
+      description: Anchor point on the image for cropping
+      required: true
+      schema:
+        type: string
+        enum: ["tl", "tc", "tr", "cl", "cc", "cr", "bl", "bc", "br"]
+    ImageCropWidth:
+      name: width
+      in: path
+      description: Width in pixels of the image thumbnail
+      required: true
+      schema:
+        type: number
+        format: integer
+    ImageCropHeight:
+      name: height
+      in: path
+      description: Height in pixels of the image thumbnail
+      required: true
+      schema:
+        type: number
+        format: integer
   responses:
     InternalServerError:
       description: Internal server error
@@ -211,6 +279,13 @@ components:
             $ref: "#/components/schemas/Error"
     NotFoundError:
       description: Image with provided ID does not exist
+      headers: *headers-default
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    MethodNotAllowedError:
+      description: The request's HTTP method is not allowed on this endpoint
       headers: *headers-default
       content:
         application/json:
