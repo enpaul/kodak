@@ -15,6 +15,7 @@ clean-tox:
 	rm --recursive --force ./.mypy_cache
 	rm --recursive --force ./.tox
 	rm --force .coverage
+	rm --force ./$(PROJECT)/openapi.yaml
 	find ./tests -type d -name __pycache__ -prune -exec rm --recursive --force {} \;
 
 clean-py:
@@ -31,13 +32,16 @@ clean-docs:
 clean: clean-tox clean-py clean-docs ## Clean temp build/cache files and directories
 	rm --force ./*db*
 
-wheel: ## Build Python binary distribution wheel package
+prep:
+	cp ./openapi.yaml ./$(PROJECT)/openapi.yaml
+
+wheel: prep ## Build Python binary distribution wheel package
 	poetry build --format wheel
 
-source: ## Build Python source distribution package
+source: prep ## Build Python source distribution package
 	poetry build --format sdist
 
-test: clean-tox ## Run the project testsuite(s)
+test: clean-tox prep ## Run the project testsuite(s)
 	poetry run tox
 
 publish: clean test wheel source ## Build and upload to pypi (requires $PYPI_API_KEY be set)

@@ -11,7 +11,7 @@ packages = [
 ]
 include = [
   "imagemuck/py.typed",
-  "imagemuck/resources/openapi.yaml"
+  "imagemuck/openapi.yaml"
 ]
 keywords = ["flask", "image", "thumbnail", "hosting"]
 readme = "README.md"
@@ -63,6 +63,7 @@ sphinx-autodoc-typehints = "^1.11.1"
 toml = "^0.10.1"
 tox = "^3.20.0"
 tox-poetry-installer = {extras = ["poetry"], version = "^0.8.0"}
+openapi-spec-validator = "^0.3.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
