@@ -58,60 +58,6 @@ paths:
           $ref: "#/components/responses/DeletedError"
         '500':
           $ref: "#/components/responses/InternalServerError"
-    post:
-      summary: Upload an image to the server
-      operationId: ImageUpload
-      tags: ["image"]
-      parameters:
-        - $ref: "#/components/parameters/ImageName"
-        - $ref: "#/components/parameters/ImageFormat"
-      responses:
-        '201':
-          description: Image uploaded successfully
-        '405':
-          $ref: "#/components/responses/MethodNotAllowedError"
-        '406':
-          description: Image is not acceptable for upload
-          headers: *headers-default
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        '409':
-          description: Image with provided ID already exists
-          headers: *headers-default
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        '413':
-          description: Image is too large for upload
-          headers: *headers-default
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        '500':
-          $ref: "#/components/responses/InternalServerError"
-    delete:
-      summary: Delete an image from the server
-      operationId: ImageDelete
-      tags: ["image", "manipulate"]
-      parameters:
-        - $ref: "#/components/parameters/ImageName"
-        - $ref: "#/components/parameters/ImageFormat"
-      responses:
-        '204':
-          description: Image with provided ID successfully deleted
-          headers: *headers-default
-        '404':
-          $ref: "#/components/responses/NotFoundError"
-        '405':
-          $ref: "#/components/responses/MethodNotAllowedError"
-        '410':
-          $ref: "#/components/responses/DeletedError"
-        '500':
-          $ref: "#/components/responses/InternalServerError"
     options:
       summary: Retrieve available HTTP verbs for the selected endpoint
       operationId: ImageOptions
@@ -187,6 +133,37 @@ paths:
         - $ref: "#/components/parameters/ImageCropAnchor"
         - $ref: "#/components/parameters/ImageCropWidth"
         - $ref: "#/components/parameters/ImageCropHeight"
+      responses: *responses-options
+  /image/{image_name}/{alias}.{format}:
+    get:
+      summary: Fetch a pre configured version of the image
+      operationId: ImageAlias
+      tags: ["manipulate"]
+      parameters:
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
+        - $ref: "#/components/parameters/ImageAlias"
+      responses:
+        '200':
+          description: Scaled thumbnail image of specified dimentions
+          headers: *headers-default
+          content:
+            image/jpeg: {}
+            image/png: {}
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '410':
+          $ref: "#/components/responses/DeletedError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+    options:
+      summary: Retrieve available HTTP verbs for the selected endpoint
+      operationId: ImageAliasOptions
+      tags: ["meta"]
+      parameters:
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
+        - $ref: "#/components/parameters/ImageAlias"
       responses: *responses-options
 components:
   schemas:
@@ -269,6 +246,13 @@ components:
       schema:
         type: number
         format: integer
+    ImageAlias:
+      name: alias
+      in: path
+      description: Name of the image config alias to use
+      required: true
+      schema:
+        type: string
   responses:
     InternalServerError:
       description: Internal server error
