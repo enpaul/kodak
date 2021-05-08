@@ -45,3 +45,7 @@ publish: clean test wheel source ## Build and upload to pypi (requires $PYPI_API
 
 docs: clean-docs ## Build the documentation using Sphinx
 	poetry run tox -e docs
+
+dev: ## Create local dev environment
+	poetry install --remove-untracked
+	poetry run pre-commit install
