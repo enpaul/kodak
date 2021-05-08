@@ -38,7 +38,7 @@ source: ## Build Python source distribution package
 	poetry build --format sdist
 
 test: clean-tox ## Run the project testsuite(s)
-	poetry run tox --parallelize-locked-install=10
+	poetry run tox
 
 publish: clean test wheel source ## Build and upload to pypi (requires $PYPI_API_KEY be set)
 	@poetry publish --username __token__ --password $(PYPI_API_KEY)
