@@ -47,11 +47,7 @@ paths:
         - $ref: "#/components/parameters/ImageFormat"
       responses:
         '200':
-          description: Image content for provided ID
-          headers: *headers-default
-          content:
-            image/jpeg: {}
-            image/png: {}
+          $ref: "#/components/responses/Image"
         '404':
           $ref: "#/components/responses/NotFoundError"
         '410':
@@ -78,11 +74,7 @@ paths:
         - $ref: "#/components/parameters/ImageScaleValue"
       responses:
         '200':
-          description: Scaled image thumbnail content
-          headers: *headers-default
-          content:
-            image/jpeg: {}
-            image/png: {}
+          $ref: "#/components/responses/Image"
         '404':
           $ref: "#/components/responses/NotFoundError"
         '410':
@@ -112,11 +104,7 @@ paths:
         - $ref: "#/components/parameters/ImageCropHeight"
       responses:
         '200':
-          description: Scaled thumbnail image of specified dimentions
-          headers: *headers-default
-          content:
-            image/jpeg: {}
-            image/png: {}
+          $ref: "#/components/responses/Image"
         '404':
           $ref: "#/components/responses/NotFoundError"
         '410':
@@ -145,11 +133,7 @@ paths:
         - $ref: "#/components/parameters/ImageAlias"
       responses:
         '200':
-          description: Scaled thumbnail image of specified dimentions
-          headers: *headers-default
-          content:
-            image/jpeg: {}
-            image/png: {}
+          $ref: "#/components/responses/Image"
         '404':
           $ref: "#/components/responses/NotFoundError"
         '410':
@@ -254,6 +238,18 @@ components:
       schema:
         type: string
   responses:
+    Image:
+      description: Image content for provided ID
+      headers:
+        <<: *headers-default
+        Digest:
+          description: SHA256 hash of the provided image content
+          schema:
+            type: string
+            format: sha256
+      content:
+        image/jpeg: {}
+        image/png: {}
     InternalServerError:
       description: Internal server error
       headers: *headers-default
