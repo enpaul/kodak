@@ -5,7 +5,7 @@ info:
   title: ImageMuck
   description: >-
     A simple HTTP service for mucking about with images. This is a super basic HTTP
-    service for autogenerating website ready banner and preview images from full-size
+    service for autogenerating website-ready banner and preview images from full-size
     source images. The generated images are automatically cached with deterministic
     URLs.
   license:
@@ -13,7 +13,7 @@ info:
     url: https://mit-license.org/
 x-anchors:
   DefaultHeaders: &headers-default
-    x-imagemuck-version:
+    Server:
       $ref: "#/components/headers/Version"
   OptionsResponses: &responses-options
     '204':
@@ -23,6 +23,24 @@ x-anchors:
           $ref: "#/components/headers/Allowed"
     '500':
       $ref: "#/components/responses/InternalServerError"
+  ImageHeaders: &headers-image
+    <<: *headers-default
+    Digest:
+      description: SHA256 hash of the provided image content
+      schema:
+        type: string
+        format: sha256
+        example: sha256:f2bf647325d5a6ad2d7ca138293f9cb224dd863fde0e3fa46bc5c15b43fece5c
+    Content-Type:
+      description: Content type of the image being returned
+      schema:
+        type: string
+        enum: [image/jpeg, image/png]
+    Cache-Control:
+      description: Cache settings for the image to prevent unnecessary reloads
+      schema:
+        type: string
+        example: public, max-age=604800, immutable
 paths:
   /openapi.json:
     get:
@@ -37,7 +55,43 @@ paths:
             application/json:
               schema:
                 type: object
-  /image/{image_name}.{format}:
+  /heartbeat:
+    head:
+      summary: Check whether the service is online
+      operationId: Heartbeat
+      tags: ["meta"]
+      responses:
+        '200':
+          description: Server is operational
+          headers: *headers-default
+        '500':
+          description: Server is not operating correctly
+          headers: *headers-default
+  /image/{image_name}:
+    head:
+      summary: Returns metadata about the image request
+      operationId: ImageHead
+      tags: ["meta"]
+      parameters:
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
+      responses:
+        '200':
+          $ref: "#/components/responses/ImageMeta"
+        '401':
+          $ref: "#/components/responses/UnauthenticatedError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '405':
+          $ref: "#/components/responses/MethodNotAllowedError"
+        '410':
+          $ref: "#/components/responses/DeletedError"
+        '422':
+          $ref: "#/components/responses/UnacceptableError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+        '501':
+          $ref: "#/components/responses/NotImplementedError"
     get:
       summary: Retrieve the image resource with the specified ID
       operationId: ImageGet
@@ -48,12 +102,20 @@ paths:
       responses:
         '200':
           $ref: "#/components/responses/Image"
+        '401':
+          $ref: "#/components/responses/UnauthenticatedError"
         '404':
           $ref: "#/components/responses/NotFoundError"
+        '405':
+          $ref: "#/components/responses/MethodNotAllowedError"
         '410':
           $ref: "#/components/responses/DeletedError"
+        '422':
+          $ref: "#/components/responses/UnacceptableError"
         '500':
           $ref: "#/components/responses/InternalServerError"
+        '501':
+          $ref: "#/components/responses/NotImplementedError"
     options:
       summary: Retrieve available HTTP verbs for the selected endpoint
       operationId: ImageOptions
@@ -62,71 +124,11 @@ paths:
         - $ref: "#/components/parameters/ImageName"
         - $ref: "#/components/parameters/ImageFormat"
       responses: *responses-options
-  /image/{image_name}/{dimension}-{value}.{format}:
-    get:
-      summary: Fetch a scaled image
-      operationId: ThumbnailScale
-      tags: ["manipulate"]
-      parameters:
-        - $ref: "#/components/parameters/ImageName"
-        - $ref: "#/components/parameters/ImageFormat"
-        - $ref: "#/components/parameters/ImageScaleDimension"
-        - $ref: "#/components/parameters/ImageScaleValue"
-      responses:
-        '200':
-          $ref: "#/components/responses/Image"
-        '404':
-          $ref: "#/components/responses/NotFoundError"
-        '410':
-          $ref: "#/components/responses/DeletedError"
-        '500':
-          $ref: "#/components/responses/InternalServerError"
-    options:
-      summary: Retrieve available HTTP verbs for the selected endpoint
-      operationId: ImageScaleOptions
+  /image/{image_name}/{alias}:
+    head:
+      summary: Returns metadata about the image request
+      operationId: ImageAliasHead
       tags: ["meta"]
-      parameters:
-        - $ref: "#/components/parameters/ImageName"
-        - $ref: "#/components/parameters/ImageFormat"
-        - $ref: "#/components/parameters/ImageScaleDimension"
-        - $ref: "#/components/parameters/ImageScaleValue"
-      responses: *responses-options
-  /image/{image_name}/{anchor}-{width}x{height}.{format}:
-    get:
-      summary: Fetch a cropped version of the image
-      operationId: ImageCrop
-      tags: ["manipulate"]
-      parameters:
-        - $ref: "#/components/parameters/ImageName"
-        - $ref: "#/components/parameters/ImageFormat"
-        - $ref: "#/components/parameters/ImageCropAnchor"
-        - $ref: "#/components/parameters/ImageCropWidth"
-        - $ref: "#/components/parameters/ImageCropHeight"
-      responses:
-        '200':
-          $ref: "#/components/responses/Image"
-        '404':
-          $ref: "#/components/responses/NotFoundError"
-        '410':
-          $ref: "#/components/responses/DeletedError"
-        '500':
-          $ref: "#/components/responses/InternalServerError"
-    options:
-      summary: Retrieve available HTTP verbs for the selected endpoint
-      operationId: ImageCropOptions
-      tags: ["meta"]
-      parameters:
-        - $ref: "#/components/parameters/ImageName"
-        - $ref: "#/components/parameters/ImageFormat"
-        - $ref: "#/components/parameters/ImageCropAnchor"
-        - $ref: "#/components/parameters/ImageCropWidth"
-        - $ref: "#/components/parameters/ImageCropHeight"
-      responses: *responses-options
-  /image/{image_name}/{alias}.{format}:
-    get:
-      summary: Fetch a pre configured version of the image
-      operationId: ImageAlias
-      tags: ["manipulate"]
       parameters:
         - $ref: "#/components/parameters/ImageName"
         - $ref: "#/components/parameters/ImageFormat"
@@ -134,10 +136,39 @@ paths:
       responses:
         '200':
           $ref: "#/components/responses/Image"
+        '401':
+          $ref: "#/components/responses/UnauthenticatedError"
         '404':
           $ref: "#/components/responses/NotFoundError"
+        '405':
+          $ref: "#/components/responses/MethodNotAllowedError"
         '410':
           $ref: "#/components/responses/DeletedError"
+        '422':
+          $ref: "#/components/responses/UnacceptableError"
+        '500':
+          $ref: "#/components/responses/InternalServerError"
+    get:
+      summary: Fetch a pre configured version of the image
+      operationId: ImageAliasGet
+      tags: ["image"]
+      parameters:
+        - $ref: "#/components/parameters/ImageName"
+        - $ref: "#/components/parameters/ImageFormat"
+        - $ref: "#/components/parameters/ImageAlias"
+      responses:
+        '200':
+          $ref: "#/components/responses/Image"
+        '401':
+          $ref: "#/components/responses/UnauthenticatedError"
+        '404':
+          $ref: "#/components/responses/NotFoundError"
+        '405':
+          $ref: "#/components/responses/MethodNotAllowedError"
+        '410':
+          $ref: "#/components/responses/DeletedError"
+        '422':
+          $ref: "#/components/responses/UnacceptableError"
         '500':
           $ref: "#/components/responses/InternalServerError"
     options:
@@ -163,13 +194,14 @@ components:
           type: object
       example:
         event_id: 0de388ae-8277-49ba-b225-3ef7f5b9d084
-        message: An error ocurred in a backend component
+        message: Website go brrr
         data: {}
   headers:
     Version:
-      description: Keyosk server application version
+      description: ImageMuck server application version
       schema:
         type: string
+        example: imagemuck-1.0.0
     Allowed:
       description: Comma delimited list of valid HTTP verbs
       schema:
@@ -183,53 +215,14 @@ components:
       schema:
         type: string
     ImageFormat:
-      name: format
-      in: path
-      description: Image format extension
-      required: true
+      name: Accept
+      in: header
+      description: Content type indicating what format the image should be returned in
+      required: false
       schema:
         type: string
-        enum: [jpg, jpeg, png]
-    ImageScaleDimension:
-      name: dimension
-      in: path
-      description: Which dimension to scale to the provided dimension
-      required: true
-      schema:
-        type: string
-        enum: ["w", "h"]
-    ImageScaleValue:
-      name: value
-      in: path
-      description: Dimension in pixels to scale the image to
-      required: true
-      schema:
-        type: number
-        format: integer
-    ImageCropAnchor:
-      name: anchor
-      in: path
-      description: Anchor point on the image for cropping
-      required: true
-      schema:
-        type: string
-        enum: ["tl", "tc", "tr", "cl", "cc", "cr", "bl", "bc", "br"]
-    ImageCropWidth:
-      name: width
-      in: path
-      description: Width in pixels of the image thumbnail
-      required: true
-      schema:
-        type: number
-        format: integer
-    ImageCropHeight:
-      name: height
-      in: path
-      description: Height in pixels of the image thumbnail
-      required: true
-      schema:
-        type: number
-        format: integer
+        default: image/jpeg
+        enum: [image/jpeg, image/png]
     ImageAlias:
       name: alias
       in: path
@@ -239,17 +232,14 @@ components:
         type: string
   responses:
     Image:
-      description: Image content for provided ID
-      headers:
-        <<: *headers-default
-        Digest:
-          description: SHA256 hash of the provided image content
-          schema:
-            type: string
-            format: sha256
+      description: Image content for the specified ID
+      headers: *headers-image
       content:
         image/jpeg: {}
         image/png: {}
+    ImageMeta:
+      description: Image content for the specified ID
+      headers: *headers-image
     InternalServerError:
       description: Internal server error
       headers: *headers-default
@@ -273,6 +263,27 @@ components:
             $ref: "#/components/schemas/Error"
     DeletedError:
       description: Image with provided ID was deleted
+      headers: *headers-default
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    UnacceptableError:
+      description: Requested image format is not supported by the server
+      headers: *headers-default
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    UnauthenticatedError:
+      description: Resource requires authentication that was not successfully provided
+      headers: *headers-default
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    NotImplementedError:
+      description: The server does not support retriving the full resolution image
       headers: *headers-default
       content:
         application/json:
