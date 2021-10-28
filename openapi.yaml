@@ -30,7 +30,7 @@ x-anchors:
       schema:
         type: string
         format: sha256
-        example: sha256:f2bf647325d5a6ad2d7ca138293f9cb224dd863fde0e3fa46bc5c15b43fece5c
+        example: sha-256=f2bf647325d5a6ad2d7ca138293f9cb224dd863fde0e3fa46bc5c15b43fece5c
     Content-Type:
       description: Content type of the image being returned
       schema:
