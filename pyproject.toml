@@ -58,8 +58,6 @@ pytest = "^5.2.0"
 pytest-cov = "^2.8.0"
 reorder-python-imports = "^2.3.0"
 safety = "^1.9.0"
-sphinx = "^3.3.0"
-sphinx-autodoc-typehints = "^1.11.1"
 toml = "^0.10.1"
 tox = "^3.20.0"
 tox-poetry-installer = {extras = ["poetry"], version = "^0.8.0"}

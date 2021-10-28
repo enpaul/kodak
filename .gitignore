@@ -14,15 +14,10 @@ dist/
 .venv/
 .mypy_cache/
 
-docs/_build/
-docs/modules.rst
-docs/fresnel_lens*.rst
-
 fresnel_lens/openapi.yaml
 
 .vscode/
 .idea/
-
 
 *.db
 *.db-shm

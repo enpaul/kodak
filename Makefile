@@ -24,12 +24,7 @@ clean-py:
 	rm --recursive --force ./*.egg-info
 	find ./$(PROJECT) -type d -name __pycache__ -prune -exec rm --recursive --force {} \;
 
-clean-docs:
-	rm --recursive --force docs/_build
-	rm --force docs/$(PROJECT)*.rst
-	rm --force docs/modules.rst
-
-clean: clean-tox clean-py clean-docs ## Clean temp build/cache files and directories
+clean: clean-tox clean-py ## Clean temp build/cache files and directories
 	rm --force ./*db*
 
 prep:
@@ -46,9 +41,6 @@ test: clean-tox prep ## Run the project testsuite(s)
 
 publish: clean test wheel source ## Build and upload to pypi (requires $PYPI_API_KEY be set)
 	@poetry publish --username __token__ --password $(PYPI_API_KEY)
-
-docs: clean-docs ## Build the documentation using Sphinx
-	poetry run tox -e docs
 
 dev: ## Create local dev environment
 	poetry install --remove-untracked
