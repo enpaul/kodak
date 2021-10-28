@@ -1,7 +1,7 @@
-from imagemuck.resources._shared import ImageMuckResource
+from fresnel_lens.resources._shared import FresnelResource
 
 
-class ThumbnailScale(ImageMuckResource):
+class ThumbnailScale(FresnelResource):
 
     routes = ("/thumb/<string:image_id>/scale/<int:scale_width>.jpg",)
 
@@ -9,7 +9,7 @@ class ThumbnailScale(ImageMuckResource):
         raise NotImplementedError
 
 
-class ThumbnailResize(ImageMuckResource):
+class ThumbnailResize(FresnelResource):
 
     routes = ("/thumb/<string:image_id>/size/<int:width>x<int:height>.jpg",)
 

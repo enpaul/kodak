@@ -12,7 +12,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).parent.resolve()
 ABOUT = {}
-with open(Path(BASE_DIR, "..", "imagemuck", "__about__.py")) as infile:
+with open(Path(BASE_DIR, "..", "fresnel_lens", "__about__.py")) as infile:
     exec(infile.read(), ABOUT)
 
 

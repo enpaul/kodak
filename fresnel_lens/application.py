@@ -1,9 +1,9 @@
 import flask_restful
 
-from imagemuck import resources
-from imagemuck._server import ImageMuckFlask
-from imagemuck._server import initialize_database
-from imagemuck._server import make_the_tea
+from fresnel_lens import resources
+from fresnel_lens._server import ImageMuckFlask
+from fresnel_lens._server import initialize_database
+from fresnel_lens._server import make_the_tea
 
 
 APPLICATION = ImageMuckFlask(__name__)

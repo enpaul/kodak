@@ -1,4 +1,4 @@
-# imagemuck
+# fresnel-lens
 
 HTTP server for handling image uploads and thumbnail generation.
 

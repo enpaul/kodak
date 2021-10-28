@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   version: 0.1.0
-  title: ImageMuck
+  title: Fresnel Lens
   description: >-
     A simple HTTP service for mucking about with images. This is a super basic HTTP
     service for autogenerating website-ready banner and preview images from full-size
@@ -198,10 +198,10 @@ components:
         data: {}
   headers:
     Version:
-      description: ImageMuck server application version
+      description: Application name and version
       schema:
         type: string
-        example: imagemuck-1.0.0
+        example: fresnel-lens-1.0.0
     Allowed:
       description: Comma delimited list of valid HTTP verbs
       schema:

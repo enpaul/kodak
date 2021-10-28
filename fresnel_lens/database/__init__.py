@@ -3,18 +3,18 @@ from typing import Tuple
 
 import peewee
 
-from imagemuck import constants
-from imagemuck.configuration import ImageMuckConfig
-from imagemuck.database._shared import ImageMuckModel
-from imagemuck.database._shared import INTERFACE as interface
-from imagemuck.database.image import ImageRecord
-from imagemuck.database.thumbnail import ThumbnailRecord
+from fresnel_lens import constants
+from fresnel_lens.configuration import FresnelConfig
+from fresnel_lens.database._shared import FresnelModel
+from fresnel_lens.database._shared import INTERFACE as interface
+from fresnel_lens.database.image import ImageRecord
+from fresnel_lens.database.thumbnail import ThumbnailRecord
 
 
-MODELS: Tuple[ImageMuckModel, ...] = (ImageRecord, ThumbnailRecord)
+MODELS: Tuple[FresnelModel, ...] = (ImageRecord, ThumbnailRecord)
 
 
-def initialize(config: ImageMuckConfig):
+def initialize(config: FresnelConfig):
     """Initialize the database interface
 
     Defining the database as an

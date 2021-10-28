@@ -16,9 +16,9 @@ dist/
 
 docs/_build/
 docs/modules.rst
-docs/imagemuck*.rst
+docs/fresnel_lens*.rst
 
-imagemuck/openapi.yaml
+fresnel_lens/openapi.yaml
 
 .vscode/
 .idea/

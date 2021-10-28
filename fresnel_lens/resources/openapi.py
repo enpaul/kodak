@@ -2,12 +2,12 @@ from pathlib import Path
 
 from ruamel.yaml import YAML
 
-from imagemuck.resources._shared import ImageMuckResource
+from fresnel_lens.resources._shared import FresnelResource
 
 yaml = YAML(typ="safe")
 
 
-class OpenAPI(ImageMuckResource):
+class OpenAPI(FresnelResource):
 
     routes = ("/openapi.json",)
 

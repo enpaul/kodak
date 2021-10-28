@@ -1,3 +1,5 @@
+import datetime
+import enum
 import json
 import os
 from dataclasses import dataclass
@@ -5,10 +7,20 @@ from dataclasses import field
 from pathlib import Path
 from typing import Any
 from typing import Dict
+from typing import NamedTuple
 from typing import Optional
+from typing import Sequence
 from typing import Tuple
 
-from imagemuck import constants
+import peewee
+
+from fresnel_lens import constants
+
+
+class DimensionConfig(NamedTuple):
+    strategy: constants.DimensionStrategy
+    anchor: constants.Anchor
+    value: int
 
 
 def _default_sqlite_pragmas() -> Dict[str, Any]:
@@ -31,7 +43,7 @@ def _default_sqlite_pragmas() -> Dict[str, Any]:
 
 @dataclass
 class _DBSqliteConfig:
-    path: Path = Path.cwd() / "imagemuck.db"
+    path: Path = Path.cwd() / "fresnel_lens.db"
     pragmas: Dict[str, Any] = field(default_factory=_default_sqlite_pragmas)
 
     @classmethod
@@ -51,7 +63,7 @@ class _DBMariaConfig:
     username: str = "root"
     password: Optional[str] = None
     port: int = 3306
-    schema: str = "imagemuck"
+    schema: str = "fresnel_lens"
 
     @classmethod
     def build(cls):
@@ -67,52 +79,40 @@ class _DBMariaConfig:
 @dataclass
 class _DBConfig:
 
-    backend: constants.SupportedDatabaseBackend = (
-        constants.SupportedDatabaseBackend.SQLITE
-    )
+    backend: constants.DatabaseBackend = constants.DatabaseBackend.SQLITE
     sqlite: _DBSqliteConfig = field(default_factory=_DBSqliteConfig.build)
     mariadb: _DBMariaConfig = field(default_factory=_DBMariaConfig.build)
 
     @classmethod
     def build(cls):
         return cls(
-            backend=constants.SupportedDatabaseBackend[
-                os.environ[constants.ENV_CONF_DB_BACKEND]
-            ]
+            backend=constants.DatabaseBackend[os.environ[constants.ENV_CONF_DB_BACKEND]]
             if constants.ENV_CONF_DB_BACKEND in os.environ
             else cls.backend
         )
 
 
 @dataclass
-class _UploadConfig:
-
-    size_limit: int = 1 * 1024 * 1024
-    formats: Tuple[str] = ("jpg", "jpeg")
-
-    @classmethod
-    def build(cls):
-        return cls(
-            size_limit=(int(os.environ[constants.ENV_CONF_FS_UPLOAD_MAX_SIZE]) * 1024)
-            if constants.ENV_CONF_FS_UPLOAD_MAX_SIZE in os.environ
-            else cls.size_limit,
-            formats=(
-                item.strip().lower()
-                for item in os.environ[constants.ENV_CONF_FS_UPLOAD_FORMATS].split(",")
-            )
-            if constants.ENV_CONF_FS_UPLOAD_MAX_SIZE in os.environ
-            else cls.formats,
-        )
+class ManipConfig:
+    alias: str
+    formats: Sequence[constants.ImageFormat] = (
+        constants.ImageFormat.JPEG,
+        constants.ImageFormat.PNG,
+    )
+    horizontal: None
+    vertical: None
 
 
 @dataclass
 class ImageMuckConfig:
     database: _DBConfig = field(default_factory=_DBConfig.build)
-    upload: _UploadConfig = field(default_factory=_UploadConfig.build)
-    storage_path: Path = Path.cwd()
+    images: Path = Path.cwd() / "images"
+    cache_dir: Path = Path.cwd() / "cache"
+    expose_source: bool = False
+    manips: Sequence[ManipConfig] = ()
 
     @classmethod
-    def build(cls):
+    def from_env(cls):
         return cls(
             storage_path=Path(
                 os.getenv(constants.ENV_CONF_FS_STORAGE_PATH, cls.storage_path)
@@ -121,5 +121,4 @@ class ImageMuckConfig:
 
 
 def load() -> ImageMuckConfig:
-
-    return ImageMuckConfig.build()
+    return ImageMuckConfig.from_env()

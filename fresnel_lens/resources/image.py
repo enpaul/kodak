@@ -4,13 +4,13 @@ import uuid
 
 import flask
 
-from imagemuck import constants
-from imagemuck import database
-from imagemuck import exceptions
-from imagemuck.resources._shared import ImageMuckResource
+from fresnel_lens import constants
+from fresnel_lens import database
+from fresnel_lens import exceptions
+from fresnel_lens.resources._shared import FresnelResource
 
 
-class ImageUpload(ImageMuckResource):
+class ImageUpload(FresnelResource):
 
     routes = ("/image/",)
 
@@ -45,7 +45,7 @@ class ImageUpload(ImageMuckResource):
         return None, 201
 
 
-class Image(ImageMuckResource):
+class Image(FresnelResource):
 
     routes = ("/image/<string:image_id>.jpeg",)
 

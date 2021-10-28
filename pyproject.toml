@@ -1,17 +1,17 @@
 [tool.poetry]
-name = "imagemuck"
+name = "fresnel-lens"
 version = "0.1.0"
 license = "MIT"
 authors = ["Ethan Paul <24588726+enpaul@users.noreply.github.com>"]
 description = "HTTP server for uploading images and generating thumbnails"
-repository = "https://github.com/mocproject/imagemuck/"
+repository = "https://github.com/enpaul/fresnel-lens/"
 packages = [
-  {include = "imagemuck"},
+  {include = "fresnel_lens"},
   {include = "tests", format = "sdist"}
 ]
 include = [
-  "imagemuck/py.typed",
-  "imagemuck/openapi.yaml"
+  "fresnel_lens/py.typed",
+  "fresnel_lens/openapi.yaml"
 ]
 keywords = ["flask", "image", "thumbnail", "hosting"]
 readme = "README.md"

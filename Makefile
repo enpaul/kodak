@@ -1,7 +1,7 @@
-# ImageMuck makefile
+# fresnel-lens makefile
 
 # You can set these variables from the command line
-PROJECT = imagemuck
+PROJECT = fresnel_lens
 
 .PHONY: help
 # Put it first so that "make" without argument is like "make help"

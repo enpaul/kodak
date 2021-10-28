@@ -1,9 +1,9 @@
 """Programatically accessible project metadata"""
 
 
-__title__ = "imagemuck"
+__title__ = "fresnel-lens"
 __version__ = "0.1.0"
 __authors__ = ["Ethan Paul <24588726+enpaul@users.noreply.github.com>"]
 __license__ = "MIT"
 __summary__ = "HTTP server for uploading images and generating thumbnails"
-__url__ = "https://github.com/mocproject/imagemuck/"
+__url__ = "https://github.com/enpaul/fresnel-lens/"

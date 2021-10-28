@@ -1,10 +1,10 @@
 import peewee
 
-from imagemuck.database._shared import ImageMuckModel
-from imagemuck.database.image import ImageRecord
+from fresnel_lens.database._shared import FresnelModel
+from fresnel_lens.database.image import ImageRecord
 
 
-class ThumbnailRecord(ImageMuckModel):
+class ThumbnailRecord(FresnelModel):
 
     parent = peewee.ForeignKeyField(ImageRecord)
     width = peewee.IntegerField(null=False)

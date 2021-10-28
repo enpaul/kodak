@@ -1,11 +1,11 @@
-ImageMuck
-=========
+Fresnel Lens
+============
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   API Reference <imagemuck>
+   API Reference <fresnel_lens>
 
 
 

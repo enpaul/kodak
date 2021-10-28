@@ -3,7 +3,7 @@ from pathlib import Path
 
 import toml
 
-from imagemuck import __about__
+from fresnel_lens import __about__
 
 
 def test_about():

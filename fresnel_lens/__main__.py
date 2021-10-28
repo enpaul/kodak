@@ -1,12 +1,12 @@
 """Development server stub entrypoint
 
-Flask comes with a built-in development server. This entrypoint allows ``imagemuck``
+Flask comes with a built-in development server. This entrypoint allows ``fresnel_lens``
 to be run directly to run the development server and expose some simple config options for ease of
 access. Run the below command to start the server:
 
 ::
 
-  python -m imagemuck
+  python -m fresnel_lens
 
 In addition to the helpful CLI flags, the Flask development server run by this module will also
 load any ``.env`` files in the current working directory when running the application.
@@ -17,7 +17,7 @@ load any ``.env`` files in the current working directory when running the applic
 import argparse
 import sys
 
-from imagemuck.application import APPLICATION
+from fresnel_lens.application import APPLICATION
 
 
 # pylint: disable=invalid-name

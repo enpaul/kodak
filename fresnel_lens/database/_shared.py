@@ -7,7 +7,7 @@ import peewee
 INTERFACE = peewee.DatabaseProxy()
 
 
-class ImageMuckModel(peewee.Model):
+class FresnelModel(peewee.Model):
     class Meta:  # pylint: disable=too-few-public-methods,missing-class-docstring
         database = INTERFACE
 

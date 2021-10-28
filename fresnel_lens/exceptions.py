@@ -2,13 +2,13 @@
 
 ::
 
-  ImageMuckException
+  FresnelException
    +-- ClientError
    +-- ServerError
 """
 
 
-class ImageMuckException(Exception):
+class FresnelException(Exception):
     """Whomp whomp, something went wrong
 
     But seriously, don't ever raise this exception
@@ -17,7 +17,7 @@ class ImageMuckException(Exception):
     status: int
 
 
-class ClientError(ImageMuckException):
+class ClientError(FresnelException):
     """Error while processing client side input"""
 
     status = 400
@@ -29,7 +29,7 @@ class ImageResourceDeletedError(ClientError):
     status = 410
 
 
-class ServerError(ImageMuckException):
+class ServerError(FresnelException):
     """Error while processing server side data"""
 
     status = 500

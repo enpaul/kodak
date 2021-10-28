@@ -31,7 +31,7 @@ class ResponseTuple(NamedTuple):
     headers: ResponseHeaders
 
 
-class ImageMuckResource(flask_restful.Resource):
+class FresnelResource(flask_restful.Resource):
     """Extension of the default :class:`flask_restful.Resource` class
 
     Add a couple of useful things to the default resource class:

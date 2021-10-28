@@ -4,10 +4,10 @@ from typing import List
 
 import peewee
 
-from imagemuck.database._shared import ImageMuckModel
+from fresnel_lens.database._shared import FresnelModel
 
 
-class ImageRecord(ImageMuckModel):
+class ImageRecord(FresnelModel):
     """Database record for"""
 
     width = peewee.IntegerField(null=False)
