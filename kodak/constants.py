@@ -8,19 +8,17 @@ class DatabaseBackend(enum.Enum):
     SQLITE = peewee.SqliteDatabase
 
 
-class DimensionStrategy(enum.Enum):
-    CROP = enum.auto()
-    SCALE = enum.auto()
+class ScaleStrategy(enum.Enum):
     RELATIVE = enum.auto()
+    ABSOLUTE = enum.auto()
 
 
 class ImageFormat(enum.Enum):
     JPEG = enum.auto()
     PNG = enum.auto()
-    GIF = enum.auto()
 
 
-class Anchor(enum.Enum):
+class CropAnchor(enum.Enum):
     TL = "top-left"
     TC = "top-center"
     TR = "top-center"
@@ -39,3 +37,5 @@ DEFAULT_SQLITE_PRAGMAS = {
     "ignore_check_constraints": 0,
     "synchronous": 0,
 }
+
+DEFAULT_SUPPORTED_FORMATS = {ImageFormat.JPEG, ImageFormat.PNG}

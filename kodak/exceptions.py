@@ -37,3 +37,7 @@ class ServerError(KodakException):
 
 class ImageFileRemovedError(ServerError):
     """Image file removed from server"""
+
+
+class ConfigurationError(ServerError):
+    """Failed to load the application configuration"""
