@@ -17,6 +17,8 @@ disable=logging-fstring-interpolation
         ,typecheck
         ,wrong-import-order
         ,wrong-import-position
+        ,missing-module-docstring
+        ,fixme
 
 
 [REPORTS]

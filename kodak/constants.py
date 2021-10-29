@@ -4,21 +4,22 @@ import peewee
 
 
 class DatabaseBackend(enum.Enum):
+    """Enum of supported database backends"""
+
     MARIADB = peewee.MySQLDatabase
     SQLITE = peewee.SqliteDatabase
 
 
 class ScaleStrategy(enum.Enum):
+    """Available strategies for scaling images"""
+
     RELATIVE = enum.auto()
     ABSOLUTE = enum.auto()
 
 
-class ImageFormat(enum.Enum):
-    JPEG = enum.auto()
-    PNG = enum.auto()
-
-
 class CropAnchor(enum.Enum):
+    """Anchor locations for cropping images"""
+
     TL = "top-left"
     TC = "top-center"
     TR = "top-center"
@@ -28,6 +29,13 @@ class CropAnchor(enum.Enum):
     BL = "bottom-left"
     BC = "bottom-center"
     BR = "bottom-right"
+
+
+class ImageFormat(enum.Enum):
+    """Supported image conversion formats"""
+
+    JPEG = enum.auto()
+    PNG = enum.auto()
 
 
 DEFAULT_SQLITE_PRAGMAS = {
