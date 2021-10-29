@@ -1,11 +1,8 @@
 import flask
 
-from fresnel_lens import __about__
 from fresnel_lens import configuration
-from fresnel_lens import constants
 from fresnel_lens import database
 from fresnel_lens import exceptions
-from fresnel_lens.resources import ResponseHeaders
 
 
 def make_the_tea() -> None:
@@ -24,30 +21,11 @@ def initialize_database() -> None:
     database.initialize(flask.current_app.appconfig)
 
 
-class FresnelRequest(flask.Request):
-    """Extend the default Flask request object to add custom application state settings"""
-
-    def make_response_headers(self) -> ResponseHeaders:
-        """Create the headers dictionary of the standard response headers
-
-        This function should be used when determining response headers so that the header names,
-        their contents, and formatting are universal.
-
-        :returns: Dictionary of headers
-        """
-
-        return {
-            constants.HTTP_HEADER_RESPONSE_VERSION: __about__.__version__,
-        }
-
-
-class ImageMuckFlask(flask.Flask):
+class FresnelFlask(flask.Flask):
     """Extend the default Flask object to add the custom application config
 
     There's probably an easier/more kosher way to do this, but ¯\\_(ツ)_/¯
     """
-
-    request_class = FresnelRequest
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

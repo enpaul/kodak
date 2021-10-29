@@ -11,6 +11,8 @@ from typing import Union
 import flask
 import flask_restful
 
+from fresnel_lens import __about__
+
 
 ResponseBody = Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]]
 
@@ -99,7 +101,7 @@ class FresnelResource(flask_restful.Resource):
         """
 
         headers = headers or {}
-        headers = {**headers, **flask.request.make_response_headers()}
+        headers.update({"Server": f"{__about__.__title__}-{__about__.__version__}"})
 
         # 204 code specifies that it must never include a response body. Most clients will ignore
         # any response body when a 204 is given, but that's no reason to abandon best practices here
