@@ -1,12 +1,12 @@
 """Development server stub entrypoint
 
-Flask comes with a built-in development server. This entrypoint allows ``fresnel_lens``
+Flask comes with a built-in development server. This entrypoint allows ``kodak``
 to be run directly to run the development server and expose some simple config options for ease of
 access. Run the below command to start the server:
 
 ::
 
-  python -m fresnel_lens
+  python -m kodak
 
 In addition to the helpful CLI flags, the Flask development server run by this module will also
 load any ``.env`` files in the current working directory when running the application.
@@ -17,7 +17,7 @@ load any ``.env`` files in the current working directory when running the applic
 import argparse
 import sys
 
-from fresnel_lens.application import APPLICATION
+from kodak.application import APPLICATION
 
 
 # pylint: disable=invalid-name

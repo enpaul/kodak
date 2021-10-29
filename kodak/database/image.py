@@ -4,10 +4,10 @@ from typing import List
 
 import peewee
 
-from fresnel_lens.database._shared import FresnelModel
+from kodak.database._shared import KodakModel
 
 
-class ImageRecord(FresnelModel):
+class ImageRecord(KodakModel):
     """Database record for"""
 
     width = peewee.IntegerField(null=False)

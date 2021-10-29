@@ -3,18 +3,18 @@ from typing import Tuple
 
 import peewee
 
-from fresnel_lens import constants
-from fresnel_lens.configuration import FresnelConfig
-from fresnel_lens.database._shared import FresnelModel
-from fresnel_lens.database._shared import INTERFACE as interface
-from fresnel_lens.database.image import ImageRecord
-from fresnel_lens.database.thumbnail import ThumbnailRecord
+from kodak import constants
+from kodak.configuration import KodakConfig
+from kodak.database._shared import INTERFACE as interface
+from kodak.database._shared import KodakModel
+from kodak.database.image import ImageRecord
+from kodak.database.thumbnail import ThumbnailRecord
 
 
-MODELS: Tuple[FresnelModel, ...] = (ImageRecord, ThumbnailRecord)
+MODELS: Tuple[KodakModel, ...] = (ImageRecord, ThumbnailRecord)
 
 
-def initialize(config: FresnelConfig):
+def initialize(config: KodakConfig):
     """Initialize the database interface
 
     Defining the database as an

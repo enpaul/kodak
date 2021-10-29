@@ -1,10 +1,10 @@
 import peewee
 
-from fresnel_lens.database._shared import FresnelModel
-from fresnel_lens.database.image import ImageRecord
+from kodak.database._shared import KodakModel
+from kodak.database.image import ImageRecord
 
 
-class ThumbnailRecord(FresnelModel):
+class ThumbnailRecord(KodakModel):
 
     parent = peewee.ForeignKeyField(ImageRecord)
     width = peewee.IntegerField(null=False)

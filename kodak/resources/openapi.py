@@ -2,13 +2,13 @@ from pathlib import Path
 
 from ruamel.yaml import YAML
 
-from fresnel_lens.resources._shared import FresnelResource
-from fresnel_lens.resources._shared import ResponseTuple
+from kodak.resources._shared import KodakResource
+from kodak.resources._shared import ResponseTuple
 
 yaml = YAML(typ="safe")
 
 
-class OpenAPI(FresnelResource):
+class OpenAPI(KodakResource):
     """Handle requests for the OpenAPI specification resource"""
 
     routes = ("/openapi.json",)

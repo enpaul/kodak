@@ -2,13 +2,13 @@
 
 ::
 
-  FresnelException
+  KodakException
    +-- ClientError
    +-- ServerError
 """
 
 
-class FresnelException(Exception):
+class KodakException(Exception):
     """Whomp whomp, something went wrong
 
     But seriously, don't ever raise this exception
@@ -17,7 +17,7 @@ class FresnelException(Exception):
     status: int
 
 
-class ClientError(FresnelException):
+class ClientError(KodakException):
     """Error while processing client side input"""
 
     status = 400
@@ -29,7 +29,7 @@ class ImageResourceDeletedError(ClientError):
     status = 410
 
 
-class ServerError(FresnelException):
+class ServerError(KodakException):
     """Error while processing server side data"""
 
     status = 500

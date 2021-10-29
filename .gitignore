@@ -14,7 +14,7 @@ dist/
 .venv/
 .mypy_cache/
 
-fresnel_lens/openapi.yaml
+kodak/openapi.yaml
 
 .vscode/
 .idea/

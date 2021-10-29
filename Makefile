@@ -1,7 +1,7 @@
-# fresnel-lens makefile
+# kodak makefile
 
 # You can set these variables from the command line
-PROJECT = fresnel_lens
+PROJECT = kodak
 
 .PHONY: help
 # Put it first so that "make" without argument is like "make help"

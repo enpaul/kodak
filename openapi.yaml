@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   version: 0.1.0
-  title: Fresnel Lens
+  title: Kodak
   description: >-
     A simple HTTP service for mucking about with images. This is a super basic HTTP
     service for autogenerating website-ready banner and preview images from full-size
@@ -201,7 +201,7 @@ components:
       description: Application name and version
       schema:
         type: string
-        example: fresnel-lens-1.0.0
+        example: kodak-1.0.0
     Allowed:
       description: Comma delimited list of valid HTTP verbs
       schema:

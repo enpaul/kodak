@@ -1,8 +1,8 @@
-from fresnel_lens.resources._shared import FresnelResource
-from fresnel_lens.resources._shared import ResponseTuple
+from kodak.resources._shared import KodakResource
+from kodak.resources._shared import ResponseTuple
 
 
-class ImageAlias(FresnelResource):
+class ImageAlias(KodakResource):
 
     routes = ("/image/<string:image_name>/<string:alias>",)
 

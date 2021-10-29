@@ -11,7 +11,7 @@ from typing import Union
 import flask
 import flask_restful
 
-from fresnel_lens import __about__
+from kodak import __about__
 
 
 ResponseBody = Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]]
@@ -33,7 +33,7 @@ class ResponseTuple(NamedTuple):
     headers: ResponseHeaders
 
 
-class FresnelResource(flask_restful.Resource):
+class KodakResource(flask_restful.Resource):
     """Extension of the default :class:`flask_restful.Resource` class
 
     Add a couple of useful things to the default resource class:

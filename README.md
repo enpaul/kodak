@@ -1,4 +1,4 @@
-# fresnel-lens
+# kodak
 
 HTTP server for handling image uploads and thumbnail generation.
 

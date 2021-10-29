@@ -1,12 +1,12 @@
 import flask_restful
 
-from fresnel_lens import resources
-from fresnel_lens._server import FresnelFlask
-from fresnel_lens._server import initialize_database
-from fresnel_lens._server import make_the_tea
+from kodak import resources
+from kodak._server import initialize_database
+from kodak._server import KodakFlask
+from kodak._server import make_the_tea
 
 
-APPLICATION = FresnelFlask(__name__)
+APPLICATION = KodakFlask(__name__)
 API = flask_restful.Api(APPLICATION, catch_all_404s=True)
 
 

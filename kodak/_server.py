@@ -1,8 +1,8 @@
 import flask
 
-from fresnel_lens import configuration
-from fresnel_lens import database
-from fresnel_lens import exceptions
+from kodak import configuration
+from kodak import database
+from kodak import exceptions
 
 
 def make_the_tea() -> None:
@@ -21,7 +21,7 @@ def initialize_database() -> None:
     database.initialize(flask.current_app.appconfig)
 
 
-class FresnelFlask(flask.Flask):
+class KodakFlask(flask.Flask):
     """Extend the default Flask object to add the custom application config
 
     There's probably an easier/more kosher way to do this, but ¯\\_(ツ)_/¯
@@ -29,4 +29,4 @@ class FresnelFlask(flask.Flask):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.appconfig: configuration.FresnelConfig = configuration.load()
+        self.appconfig: configuration.KodakConfig = configuration.load()

@@ -1,10 +1,10 @@
-from fresnel_lens import configuration
-from fresnel_lens import database
-from fresnel_lens.resources._shared import FresnelResource
-from fresnel_lens.resources._shared import ResponseTuple
+from kodak import configuration
+from kodak import database
+from kodak.resources._shared import KodakResource
+from kodak.resources._shared import ResponseTuple
 
 
-class Heartbeat(FresnelResource):
+class Heartbeat(KodakResource):
 
     routes = ("/heartbeat",)
 

@@ -7,7 +7,7 @@ import peewee
 INTERFACE = peewee.DatabaseProxy()
 
 
-class FresnelModel(peewee.Model):
+class KodakModel(peewee.Model):
     class Meta:  # pylint: disable=too-few-public-methods,missing-class-docstring
         database = INTERFACE
 
