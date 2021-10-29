@@ -124,15 +124,15 @@ paths:
         - $ref: "#/components/parameters/ImageName"
         - $ref: "#/components/parameters/ImageFormat"
       responses: *responses-options
-  /image/{image_name}/{alias}:
+  /image/{image_name}/{manip}:
     head:
       summary: Returns metadata about the image request
-      operationId: ImageAliasHead
+      operationId: ImageManipHead
       tags: ["meta"]
       parameters:
         - $ref: "#/components/parameters/ImageName"
         - $ref: "#/components/parameters/ImageFormat"
-        - $ref: "#/components/parameters/ImageAlias"
+        - $ref: "#/components/parameters/ImageManip"
       responses:
         '200':
           $ref: "#/components/responses/Image"
@@ -150,12 +150,12 @@ paths:
           $ref: "#/components/responses/InternalServerError"
     get:
       summary: Fetch a pre configured version of the image
-      operationId: ImageAliasGet
+      operationId: ImageManipGet
       tags: ["image"]
       parameters:
         - $ref: "#/components/parameters/ImageName"
         - $ref: "#/components/parameters/ImageFormat"
-        - $ref: "#/components/parameters/ImageAlias"
+        - $ref: "#/components/parameters/ImageManip"
       responses:
         '200':
           $ref: "#/components/responses/Image"
@@ -173,12 +173,12 @@ paths:
           $ref: "#/components/responses/InternalServerError"
     options:
       summary: Retrieve available HTTP verbs for the selected endpoint
-      operationId: ImageAliasOptions
+      operationId: ImageManipOptions
       tags: ["meta"]
       parameters:
         - $ref: "#/components/parameters/ImageName"
         - $ref: "#/components/parameters/ImageFormat"
-        - $ref: "#/components/parameters/ImageAlias"
+        - $ref: "#/components/parameters/ImageManip"
       responses: *responses-options
 components:
   schemas:
@@ -223,10 +223,10 @@ components:
         type: string
         default: image/jpeg
         enum: [image/jpeg, image/png]
-    ImageAlias:
-      name: alias
+    ImageManip:
+      name: manip
       in: path
-      description: Name of the image config alias to use
+      description: Name of the image config manip to use
       required: true
       schema:
         type: string
