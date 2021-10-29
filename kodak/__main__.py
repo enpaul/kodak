@@ -20,8 +20,8 @@ import sys
 from kodak.application import APPLICATION
 
 
-# pylint: disable=invalid-name
 def main():
+    """Run the development server"""
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-b",

@@ -21,5 +21,5 @@ class OpenAPI(KodakResource):
         return self.make_response(data)
 
     def head(self) -> ResponseTuple:
-        """Alias of GET with no response body"""
+        """Alias HEAD to GET"""
         return self._head(self.get())

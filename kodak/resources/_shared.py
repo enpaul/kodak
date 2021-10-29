@@ -1,6 +1,7 @@
 """Shared resource base with common functionality"""
 import logging
 from typing import Any
+from typing import Callable
 from typing import Dict
 from typing import List
 from typing import NamedTuple
@@ -18,6 +19,20 @@ ResponseBody = Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]]
 
 
 ResponseHeaders = Dict[str, str]
+
+
+def authenticated(func) -> Callable:
+    """Decorator to wrap endpoints that need a client to authenticate to access
+
+    .. note:: This function has no effect if ``config.private`` is set to ``False``
+    """
+
+    def _wrapper(*args, **kwargs):
+        return func(*args, **kwargs)
+
+    # TODO: Implement this
+
+    return _wrapper
 
 
 class ResponseTuple(NamedTuple):
@@ -57,8 +72,8 @@ class KodakResource(flask_restful.Resource):
         self.logger = logging.getLogger()
 
     def options(
-        self, *args, **kwargs
-    ) -> ResponseTuple:  # pylint: disable=unused-argument
+        self, *args, **kwargs  # pylint: disable=unused-argument
+    ) -> ResponseTuple:
         """Implement HTTP ``OPTIONS`` support
 
         `Reference documentation <https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/OPTIONS>`_
@@ -80,7 +95,7 @@ class KodakResource(flask_restful.Resource):
         """
         return self.make_response(None, response.code, response.headers)
 
-    def make_response(
+    def make_response(  # pylint: disable=no-self-use
         self,
         data: ResponseBody,
         code: int = 200,
