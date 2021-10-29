@@ -15,15 +15,27 @@ class DimensionStrategy(enum.Enum):
 
 
 class ImageFormat(enum.Enum):
-    JPEG = ("jpg", "jpeg")
-    PNG = ("png",)
-    GIF = ("gif",)
+    JPEG = enum.auto()
+    PNG = enum.auto()
+    GIF = enum.auto()
 
 
 class Anchor(enum.Enum):
+    TL = "top-left"
+    TC = "top-center"
+    TR = "top-center"
+    CL = "center-left"
     C = "center"
+    CR = "center-right"
+    BL = "bottom-left"
+    BC = "bottom-center"
+    BR = "bottom-right"
 
 
-HTTP_HEADER_RESPONSE_VERSION = "x-fresnel_lens-version"
-
-HTTP_HEADER_RESPONSE_DIGEST = "Digest"
+DEFAULT_SQLITE_PRAGMAS = {
+    "journal_mode": "wal",
+    "cache_size": -1 * 64000,
+    "foreign_keys": 1,
+    "ignore_check_constraints": 0,
+    "synchronous": 0,
+}
