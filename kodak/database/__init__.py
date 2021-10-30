@@ -4,14 +4,16 @@ from typing import Tuple
 import peewee
 
 from kodak import constants
+from kodak import exceptions
 from kodak.configuration import KodakConfig
 from kodak.database._shared import INTERFACE as interface
 from kodak.database._shared import KodakModel
+from kodak.database.access import AccessRecord
+from kodak.database.alias import AliasRecord
 from kodak.database.image import ImageRecord
-from kodak.database.thumbnail import ThumbnailRecord
 
 
-MODELS: Tuple[KodakModel, ...] = (ImageRecord, ThumbnailRecord)
+MODELS: Tuple[KodakModel, ...] = (ImageRecord, AliasRecord, AccessRecord)
 
 
 def initialize(config: KodakConfig):
@@ -26,13 +28,13 @@ def initialize(config: KodakConfig):
 
     logger = logging.getLogger(__name__)
 
-    if config.database.backend == constants.SupportedDatabaseBackend.SQLITE:
+    if config.database.backend == constants.DatabaseBackend.SQLITE:
         logger.debug("Using SQLite database backend")
         logger.debug(f"Applying SQLite pragmas: {config.database.sqlite.pragmas}")
         database = peewee.SqliteDatabase(
             config.database.sqlite.path, pragmas=config.database.sqlite.pragmas
         )
-    elif config.database.backend == constants.SupportedDatabaseBackend.MARIADB:
+    elif config.database.backend == constants.DatabaseBackend.MARIADB:
         logger.debug("Using MariaDB database backend")
         logger.debug(
             "Configuring MariaDB:"
@@ -48,7 +50,7 @@ def initialize(config: KodakConfig):
             charset="utf8mb4",
         )
     else:
-        raise ValueError(
+        raise exceptions.ConfigurationError(
             f"Invalid storage backend in configuration: {config.database.backend}"
         )
 
