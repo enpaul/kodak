@@ -1,11 +1,14 @@
 import datetime
 import enum
-import hashlib
+import typing
 import uuid
 from typing import NamedTuple
 from typing import Type
 
 import peewee
+
+if typing.TYPE_CHECKING:
+    import _hashlib
 
 
 INTERFACE = peewee.DatabaseProxy()
@@ -22,7 +25,7 @@ class Checksum(NamedTuple):
     digest: str
 
     @classmethod
-    def from_hash(cls, data: hashlib._hashlib.HASH):  # pylint: disable=protected-access
+    def from_hash(cls, data: "_hashlib.HASH"):
         """Construct from a hashlib object"""
         return cls(algorithm=data.name, digest=data.hexdigest())
 

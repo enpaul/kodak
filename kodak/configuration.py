@@ -136,7 +136,7 @@ class ManipCropConfig:
     def from_env(cls, key: str):
         """Build dataclass from environment"""
         return cls(
-            anchor=_get_enum_by_value(
+            anchor=_get_enum_by_value(  # type: ignore
                 f"KODAK_MANIP_{key}_CROP_ANCHOR", constants.CropAnchor, cls.anchor
             ),
             horizontal=_get_int(f"KODAK_MANIP_{key}_CROP_HORIZONTAL", cls.horizontal),
@@ -173,16 +173,16 @@ class ManipScaleConfig:
         )
 
         if strategy == constants.ScaleStrategy.ABSOLUTE:
-            parser = _get_int
+            parser = _get_int  # type: ignore
         elif strategy == constants.ScaleStrategy.RELATIVE:
-            parser = _get_float
+            parser = _get_float  # type: ignore
         else:
             raise RuntimeError("This path should not be possible")
 
         return cls(
-            strategy=strategy,
-            vertical=parser(f"KODAK_MANIP_{key}_SCALE_VERTICAL", cls.vertical),
-            horizontal=parser(f"KODAK_MANIP_{key}_SCALE_HORIZONTAL", cls.horizontal),
+            strategy=strategy,  # type: ignore
+            vertical=parser(f"KODAK_MANIP_{key}_SCALE_VERTICAL", cls.vertical),  # type: ignore
+            horizontal=parser(f"KODAK_MANIP_{key}_SCALE_HORIZONTAL", cls.horizontal),  # type: ignore
         )
 
 
@@ -198,8 +198,8 @@ class ManipConfig:
     """
 
     name: str
-    crop: ManipCropConfig = field(default_factory=ManipCropConfig.from_env)
-    scale: ManipScaleConfig = field(default_factory=ManipScaleConfig.from_env)
+    crop: ManipCropConfig = field(default_factory=ManipCropConfig)
+    scale: ManipScaleConfig = field(default_factory=ManipScaleConfig)
     formats: Set[constants.ImageFormat] = field(
         default_factory=lambda: constants.DEFAULT_SUPPORTED_FORMATS
     )

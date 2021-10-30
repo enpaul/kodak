@@ -12,6 +12,7 @@ from kodak import exceptions
 
 @contextlib.contextmanager
 def mockenv(patch, env: Dict[str, str]):
+    """Simple context manager for patching in a bunch of env vars"""
     for key, value in env.items():
         patch.setenv(key, value)
     yield
@@ -20,6 +21,8 @@ def mockenv(patch, env: Dict[str, str]):
 
 
 def test_conf_global(monkeypatch):
+    """Test the global config object and env parser"""
+
     assert configuration.KodakConfig() == configuration.load()
 
     with mockenv(
@@ -53,6 +56,8 @@ def test_conf_global(monkeypatch):
 
 
 def test_conf_database(monkeypatch):
+    """Test the database config object and env parser"""
+
     with mockenv(monkeypatch, {"KODAK_DATABASE_BACKEND": "couchdb"}):
         with pytest.raises(exceptions.ConfigurationError):
             configuration.load()
@@ -94,6 +99,8 @@ def test_conf_database(monkeypatch):
 
 
 def test_conf_manip(monkeypatch):
+    """Test the manipulation config object and env parser"""
+
     with mockenv(
         monkeypatch,
         {

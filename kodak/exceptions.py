@@ -29,6 +29,12 @@ class ImageResourceDeletedError(ClientError):
     status = 410
 
 
+class IAmATeapotError(ClientError):
+    """User tried to brew coffee, but application is a teapot"""
+
+    status = 418
+
+
 class ServerError(KodakException):
     """Error while processing server side data"""
 

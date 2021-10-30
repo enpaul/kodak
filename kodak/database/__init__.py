@@ -1,5 +1,6 @@
 import logging
 from typing import Tuple
+from typing import Type
 
 import peewee
 
@@ -13,7 +14,7 @@ from kodak.database.alias import AliasRecord
 from kodak.database.image import ImageRecord
 
 
-MODELS: Tuple[KodakModel, ...] = (ImageRecord, AliasRecord, AccessRecord)
+MODELS: Tuple[Type[KodakModel], ...] = (ImageRecord, AliasRecord, AccessRecord)
 
 
 def initialize(config: KodakConfig):
