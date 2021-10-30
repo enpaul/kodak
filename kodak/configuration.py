@@ -8,6 +8,7 @@ from typing import Any
 from typing import Dict
 from typing import Optional
 from typing import Set
+from typing import Type
 from typing import Union
 
 from kodak import constants
@@ -23,13 +24,13 @@ def _get_float(var: str, default: Optional[float]) -> Optional[float]:
 
 
 def _get_enum_by_name(
-    var: str, enumeration: enum.Enum, default: enum.Enum
+    var: str, enumeration: Type[enum.Enum], default: enum.Enum
 ) -> enum.Enum:
     return enumeration[os.environ[var].upper()] if var in os.environ else default
 
 
 def _get_enum_by_value(
-    var: str, enumeration: enum.Enum, default: enum.Enum
+    var: str, enumeration: Type[enum.Enum], default: enum.Enum
 ) -> enum.Enum:
     return enumeration(os.environ[var].lower()) if var in os.environ else default
 
