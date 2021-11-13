@@ -2,6 +2,8 @@ import datetime
 import enum
 import typing
 import uuid
+from pathlib import Path
+from typing import Dict
 from typing import NamedTuple
 from typing import Type
 
@@ -48,7 +50,7 @@ class EnumField(peewee.CharField):
             raise peewee.IntegrityError(
                 f"Enum {self.enumeration.__name__} has no value '{value}'"
             )
-        return value.name
+        return super().db_value(value.name)
 
     def python_value(self, value: str) -> enum.Enum:
         """Convert the stored string to the corresponding enum
@@ -59,11 +61,23 @@ class EnumField(peewee.CharField):
         :returns: The enum item with the name passed to ``value``
         """
         try:
-            return self.enumeration[value]
+            return self.enumeration[super().python_value(value)]
         except KeyError:
             raise peewee.InterfaceError(
                 f"Enum {self.enumeration.__name__} has no value with name '{value}'"
             ) from None
+
+
+class PathField(peewee.CharField):
+    """Field for storing paths in the database"""
+
+    def db_value(self, value: Path) -> str:
+        """Serialize a pathlib object to a database string"""
+        return super().db_value(str(value))
+
+    def python_value(self, value: str) -> Path:
+        """Serialize a database string to a pathlib object"""
+        return Path(super().python_value(value))
 
 
 class ChecksumField(peewee.CharField):
@@ -79,11 +93,11 @@ class ChecksumField(peewee.CharField):
 
     def db_value(self, value: Checksum) -> str:
         """Serialize the checkstum to a database string"""
-        return f"{value.algorithm}:{value.digest}"
+        return super().db_value(f"{value.algorithm}:{value.digest}")
 
     def python_value(self, value: str) -> Checksum:
         """Deserailize a string to a checksum container"""
-        alg, _, digest = value.partition(":")
+        alg, _, digest = super().python_value(value).partition(":")
         return Checksum(algorithm=alg, digest=digest)
 
 
@@ -95,3 +109,9 @@ class KodakModel(peewee.Model):
 
     uuid = peewee.UUIDField(null=False, unique=True, default=uuid.uuid4)
     created = peewee.DateTimeField(null=False, default=datetime.datetime.utcnow)
+
+    @classmethod
+    @property
+    def fields(cls) -> Dict[str, peewee.Field]:
+        """Expose the peewee field metadata as a public object"""
+        return cls._meta.fields  # pylint: disable=protected-access

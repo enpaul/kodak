@@ -1,4 +1,7 @@
 import enum
+from typing import Any
+from typing import Dict
+from typing import Set
 
 import peewee
 
@@ -34,11 +37,11 @@ class CropAnchor(enum.Enum):
 class ImageFormat(enum.Enum):
     """Supported image conversion formats"""
 
-    JPEG = enum.auto()
-    PNG = enum.auto()
+    JPEG = ("jpg", "jpeg")
+    PNG = ("png",)
 
 
-DEFAULT_SQLITE_PRAGMAS = {
+DEFAULT_SQLITE_PRAGMAS: Dict[str, Any] = {
     "journal_mode": "wal",
     "cache_size": -1 * 64000,
     "foreign_keys": 1,
@@ -46,4 +49,14 @@ DEFAULT_SQLITE_PRAGMAS = {
     "synchronous": 0,
 }
 
-DEFAULT_SUPPORTED_FORMATS = {ImageFormat.JPEG, ImageFormat.PNG}
+SQLITE_VARIABLE_LIMIT = 999
+
+DEFAULT_SUPPORTED_FORMATS: Set[ImageFormat] = {ImageFormat.JPEG, ImageFormat.PNG}
+
+IMAGE_PATH_NAME_SEPARATOR: str = "-"
+
+IMAGE_FILE_EXTENSIONS: Set[str] = set()
+
+for item in ImageFormat:
+    for ext in item.value:
+        IMAGE_FILE_EXTENSIONS.add(f".{ext}")
