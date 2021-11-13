@@ -127,12 +127,12 @@ def build(config: Optional[configuration.KodakConfig] = None) -> None:
 
     with database.interface.atomic():
         for image in database.ImageRecord.select().where(
-            database.ImageRecord.deleted
-            == False  # pylint: disable=singleton-comparison
+            database.ImageRecord.deleted  # pylint: disable=singleton-comparison
+            == False
         ):
             if config.expose_source:
                 logger.debug(f"Creating source link to {image.source}")
                 image.create_link(config)
             else:
                 logger.debug(f"Removing source link to {image.source}")
-                image.delete_link(config)
+                image.remove_link(config)

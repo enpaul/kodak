@@ -31,6 +31,17 @@ class Checksum(NamedTuple):
         """Construct from a hashlib object"""
         return cls(algorithm=data.name, digest=data.hexdigest())
 
+    def as_header(self) -> str:
+        """Format the checksum for the Content-Digest HTTP header"""
+        if self.algorithm.startswith("sha"):
+            alg = f"sha-{self.algorithm[3:]}"
+        elif self.algorithm.startswith("id"):
+            alg = f"id-sha-{self.algorithm[3:]}"
+        else:
+            alg = self.algorithm
+
+        return f"{alg}={self.digest}"
+
 
 class EnumField(peewee.CharField):
     """Custom field for storing enums"""
