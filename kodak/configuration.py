@@ -243,8 +243,8 @@ class KodakConfig:
 
     database: DatabaseConfig = field(default_factory=DatabaseConfig.from_env)
     manips: Dict[str, ManipConfig] = field(default_factory=dict)
-    source_dir: Path = Path.cwd() / "images"
-    content_dir: Path = Path.cwd() / "images"
+    source_dir: Path = Path.cwd() / "pictures"
+    content_dir: Path = Path.cwd() / "content"
     expose_source: bool = False
     private: bool = False
 
