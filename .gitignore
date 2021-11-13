@@ -22,3 +22,5 @@ kodak/openapi.yaml
 *.db
 *.db-shm
 *.db-wal
+pictures/
+content/
