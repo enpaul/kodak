@@ -1,4 +1,3 @@
-import hashlib
 import os
 from pathlib import Path
 
@@ -29,18 +28,7 @@ class ImageRecord(KodakModel):
         :param config: Populated application configuration object
         :param path: Full path to the image file to process. The file path provided is expected to
                      already be absolute, with all symlinks and aliases resolved.
-
-        .. note:: This method attempts to _efficiently_ compute a hash of large image files. The
-                  hashing code was adapted from here:
-
-                  https://stackoverflow.com/a/44873382/5361209
         """
-        hasher = hashlib.sha256()
-        view = memoryview(bytearray(1024 * 1024))
-        with path.open("rb", buffering=0) as infile:
-            for chunk in iter(lambda: infile.readinto(view), 0):  # type: ignore
-                hasher.update(view[:chunk])
-
         name = path.stem
         extension = path.suffix
 
@@ -56,7 +44,7 @@ class ImageRecord(KodakModel):
         )
 
         return cls(
-            name=name, source=path, format_=format_, checksum=Checksum.from_hash(hasher)
+            name=name, source=path, format_=format_, checksum=Checksum.from_path(path)
         )
 
     def create_link(self, config: configuration.KodakConfig) -> Path:
@@ -65,7 +53,8 @@ class ImageRecord(KodakModel):
         :param config: Populated application configuration object
         :returns: Path to the created symbolic link back to the source file
         """
-        link = Path(config.content_dir, self.name)
+        Path(config.content_dir, self.name).mkdir(exist_ok=True)
+        link = Path(config.content_dir, self.name, "original")
         try:
             link.symlink_to(self.source)
         except FileExistsError:
@@ -77,4 +66,4 @@ class ImageRecord(KodakModel):
 
         :param config: Populated application configuration object
         """
-        Path(config.content_dir, self.name).unlink(missing_ok=True)
+        Path(config.content_dir, self.name, "original").unlink(missing_ok=True)

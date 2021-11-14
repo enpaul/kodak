@@ -8,6 +8,7 @@ import peewee
 from kodak import constants
 from kodak import exceptions
 from kodak.configuration import KodakConfig
+from kodak.database._shared import Checksum
 from kodak.database._shared import INTERFACE as interface
 from kodak.database._shared import KodakModel
 from kodak.database.access import AccessRecord

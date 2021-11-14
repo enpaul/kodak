@@ -1,11 +1,14 @@
 import datetime
 import enum
+import hashlib
 import typing
 import uuid
 from pathlib import Path
+from typing import Callable
 from typing import Dict
 from typing import NamedTuple
 from typing import Type
+from typing import Union
 
 import peewee
 
@@ -30,6 +33,24 @@ class Checksum(NamedTuple):
     def from_hash(cls, data: "_hashlib.HASH"):
         """Construct from a hashlib object"""
         return cls(algorithm=data.name, digest=data.hexdigest())
+
+    @classmethod
+    def from_path(cls, path: Union[str, Path], constructor: Callable = hashlib.sha256):
+        """Construct from a file path, generating the hash of the file
+
+        .. note:: This method attempts to _efficiently_ compute a hash of large image files. The
+                  hashing code was adapted from here:
+
+                  https://stackoverflow.com/a/44873382/5361209
+        """
+
+        hasher = constructor()
+        view = memoryview(bytearray(1024 * 1024))
+        with path.open("rb", buffering=0) as infile:
+            for chunk in iter(lambda: infile.readinto(view), 0):  # type: ignore
+                hasher.update(view[:chunk])
+
+        return cls.from_hash(hasher)
 
     def as_header(self) -> str:
         """Format the checksum for the Content-Digest HTTP header"""
