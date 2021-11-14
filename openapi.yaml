@@ -25,7 +25,7 @@ x-anchors:
       $ref: "#/components/responses/InternalServerError"
   ImageHeaders: &headers-image
     <<: *headers-default
-    Digest:
+    Content-Digest:
       description: SHA256 hash of the provided image content
       schema:
         type: string
