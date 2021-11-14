@@ -67,7 +67,7 @@ paths:
         '500':
           description: Server is not operating correctly
           headers: *headers-default
-  /image/{image_name}:
+  /image/{image_name}/original:
     head:
       summary: Returns metadata about the image request
       operationId: ImageHead

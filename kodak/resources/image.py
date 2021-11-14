@@ -11,7 +11,7 @@ from kodak.resources._shared import ResponseTuple
 class Image(KodakResource):
     """Handle requests for original source images"""
 
-    routes = ("/image/<string:image_name>",)
+    routes = ("/image/<string:image_name>/original",)
 
     @authenticated
     def get(self, image_name: str) -> flask.Response:  # pylint: disable=no-self-use

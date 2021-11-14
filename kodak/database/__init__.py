@@ -11,11 +11,11 @@ from kodak.configuration import KodakConfig
 from kodak.database._shared import INTERFACE as interface
 from kodak.database._shared import KodakModel
 from kodak.database.access import AccessRecord
-from kodak.database.alias import AliasRecord
 from kodak.database.image import ImageRecord
+from kodak.database.manip import ManipRecord
 
 
-MODELS: Tuple[Type[KodakModel], ...] = (ImageRecord, AliasRecord, AccessRecord)
+MODELS: Tuple[Type[KodakModel], ...] = (ImageRecord, ManipRecord, AccessRecord)
 
 
 def calc_batch_size(

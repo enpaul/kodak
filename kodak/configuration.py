@@ -213,8 +213,15 @@ class ManipConfig:
     @classmethod
     def from_env(cls, key: str):
         """Build dataclass from environment"""
+        name = os.getenv(f"KODAK_MANIP_{key}_NAME", key.lower())
+
+        if name == "original":
+            raise exceptions.ConfigurationError(
+                "Manipulation name 'original' is reserved for application usage"
+            )
+
         return cls(
-            name=os.getenv(f"KODAK_MANIP_{key}_NAME", key.lower()),
+            name=name,
             crop=ManipCropConfig.from_env(key),
             scale=ManipScaleConfig.from_env(key),
             formats=set(
