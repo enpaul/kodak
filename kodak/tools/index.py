@@ -1,4 +1,5 @@
 import logging
+import shutil
 from pathlib import Path
 from typing import List
 from typing import Optional
@@ -117,11 +118,14 @@ def build(config: Optional[configuration.KodakConfig] = None) -> None:
             ),
         )
 
-    logger.info(f"Removing source links to {len(removed_images)} removed image files")
+    logger.info(
+        f"Removing generated assets for {len(removed_images)} removed image files"
+    )
 
     for image in removed_images:
-        logger.debug(f"Removing link to removed source image {image.source}")
-        image.remove_link(config)
+        content = config.content_dir / image.name
+        logger.debug(f"Removing content directory {content}")
+        shutil.rmtree(str(content))
 
     logger.info("Processing source links")
 

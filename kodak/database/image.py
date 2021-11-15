@@ -29,22 +29,24 @@ class ImageRecord(KodakModel):
         :param path: Full path to the image file to process. The file path provided is expected to
                      already be absolute, with all symlinks and aliases resolved.
         """
-        name = path.stem
         extension = path.suffix
 
         for item in constants.ImageFormat:
-            if extension.lower()[1:] in item.value:
+            if extension.replace(".", "") in item.value:
                 format_ = item
                 break
         else:
             raise RuntimeError
 
-        name = name.replace(str(config.source_dir), "").replace(
+        name = str(path.relative_to(config.source_dir)).replace(
             os.sep, constants.IMAGE_PATH_NAME_SEPARATOR
-        )
+        )[: -len(extension)]
 
         return cls(
-            name=name, source=path, format_=format_, checksum=Checksum.from_path(path)
+            name=name,
+            source=path.relative_to(config.source_dir),
+            format_=format_,
+            checksum=Checksum.from_path(path),
         )
 
     def create_link(self, config: configuration.KodakConfig) -> Path:
@@ -56,7 +58,7 @@ class ImageRecord(KodakModel):
         Path(config.content_dir, self.name).mkdir(exist_ok=True)
         link = Path(config.content_dir, self.name, "original")
         try:
-            link.symlink_to(self.source)
+            link.symlink_to(config.source_dir / self.source)
         except FileExistsError:
             pass
         return link

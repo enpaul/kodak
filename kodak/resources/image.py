@@ -19,6 +19,9 @@ class Image(KodakResource):
         with database.interface.atomic():
             image = database.ImageRecord.get(database.ImageRecord.name == image_name)
 
+        # Note that this sends the original source file directly, rather than the symlink named
+        # "original". This is because flask will serve the symlink file itself, not the linked file,
+        # to the browser.
         resp = flask.send_file(
             image.source,
             cache_timeout=int(datetime.timedelta(days=365).total_seconds()),
