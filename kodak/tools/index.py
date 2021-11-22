@@ -21,7 +21,7 @@ def identify(config: configuration.KodakConfig) -> List[database.ImageRecord]:
         for item in path.iterdir():
             if item.is_file() and item.suffix in constants.IMAGE_FILE_EXTENSIONS:
                 logger.debug(f"Including file {item}")
-                identified.append(item)
+                identified.append(item.resolve())
             elif item.is_dir():
                 logger.debug(f"Entering subdirectory {item}")
                 identified += _identify(item)
@@ -49,7 +49,7 @@ def identify(config: configuration.KodakConfig) -> List[database.ImageRecord]:
 
     results = []
     for image in images:
-        if image in existing:
+        if image.relative_to(config.source_dir) in existing:
             logger.debug(f"Skipping existing {image}")
         else:
             logger.debug(f"Including newly identified image {image}")
@@ -58,7 +58,7 @@ def identify(config: configuration.KodakConfig) -> List[database.ImageRecord]:
     return results
 
 
-def clean() -> List[database.ImageRecord]:
+def clean(config: configuration.KodakConfig) -> List[database.ImageRecord]:
     """Identify removed or changed source images and mark them as deleted
 
     :param config: Populated application configuration object
@@ -78,7 +78,7 @@ def clean() -> List[database.ImageRecord]:
 
     deleted = []
     for item in existing:
-        if item.source.exists():
+        if (config.source_dir / item.source).exists():
             logger.debug(
                 f"Image file exists, record will not be modified: {item.source}"
             )
@@ -108,7 +108,7 @@ def build(config: Optional[configuration.KodakConfig] = None) -> None:
             batch_size=database.calc_batch_size(config.database.backend, new_images),
         )
 
-    removed_images = clean()
+    removed_images = clean(config)
     with database.interface.atomic():
         database.ImageRecord.bulk_update(
             removed_images,

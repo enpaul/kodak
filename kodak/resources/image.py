@@ -23,7 +23,7 @@ class Image(KodakResource):
         # "original". This is because flask will serve the symlink file itself, not the linked file,
         # to the browser.
         resp = flask.send_file(
-            image.source,
+            flask.current_app.appconfig.source_dir / image.source,
             cache_timeout=int(datetime.timedelta(days=365).total_seconds()),
             add_etags=False,
         )
