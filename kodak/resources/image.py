@@ -16,6 +16,9 @@ class Image(KodakResource):
     @authenticated
     def get(self, image_name: str) -> flask.Response:  # pylint: disable=no-self-use
         """Retrieve an original source image"""
+        if not flask.current_app.appconfig.expose_source:
+            raise RuntimeError
+
         with database.interface.atomic():
             image = database.ImageRecord.get(database.ImageRecord.name == image_name)
 
