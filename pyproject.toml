@@ -43,9 +43,13 @@ kodak = "kodak.cli:main"
 python = "^3.7"
 flask = "^1.1.2"
 flask-restful = "^0.3.8"
+gunicorn = {version = "^20.1.0", optional = true}
 peewee = "^3.13.3"
 Pillow = "^8.3.2"
 "ruamel.yaml" = "^0.16.12"
+
+[tool.poetry.extras]
+deployment = ["gunicorn"]
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.6.2"
