@@ -5,7 +5,7 @@ import sys
 from kodak import __about__
 from kodak import configuration
 from kodak import database
-from kodak import tools
+from kodak import index
 
 
 def get_args() -> argparse.Namespace:
@@ -59,7 +59,7 @@ def main() -> int:
     if args.index:
         config = configuration.load()
         database.initialize(config)
-        tools.index.build(config)
+        index.build(config)
         return 0
 
     if args.server:
