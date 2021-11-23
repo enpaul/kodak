@@ -1,6 +1,7 @@
 import datetime
 import enum
 import hashlib
+import logging
 import typing
 import uuid
 from pathlib import Path
@@ -49,6 +50,10 @@ class Checksum(NamedTuple):
         with path.open("rb", buffering=0) as infile:
             for chunk in iter(lambda: infile.readinto(view), 0):  # type: ignore
                 hasher.update(view[:chunk])
+
+        logging.getLogger(__name__).debug(
+            f"Checksum of file {path}: {hasher.name}:{hasher.hexdigest()}"
+        )
 
         return cls.from_hash(hasher)
 

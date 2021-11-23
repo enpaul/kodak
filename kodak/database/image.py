@@ -1,3 +1,4 @@
+import logging
 import os
 from pathlib import Path
 
@@ -29,11 +30,17 @@ class ImageRecord(KodakModel):
         :param path: Full path to the image file to process. The file path provided is expected to
                      already be absolute, with all symlinks and aliases resolved.
         """
-        extension = path.suffix
+        logger = logging.getLogger(__name__)
 
+        logger.debug(f"Creating image record from path {path}")
+
+        extension = path.suffix
         for item in constants.ImageFormat:
-            if extension.replace(".", "") in item.value:
+            if extension.replace(".", "").lower() in item.value:
                 format_ = item
+                logger.debug(
+                    f"Identified format of file {path} as '{format_.name}' based on file extension"
+                )
                 break
         else:
             raise RuntimeError
@@ -41,6 +48,8 @@ class ImageRecord(KodakModel):
         name = str(path.relative_to(config.source_dir)).replace(
             os.sep, constants.IMAGE_PATH_NAME_SEPARATOR
         )[: -len(extension)]
+
+        logger.debug(f"Determined image name of file {path} to be '{name}'")
 
         return cls(
             name=name,
@@ -55,10 +64,15 @@ class ImageRecord(KodakModel):
         :param config: Populated application configuration object
         :returns: Path to the created symbolic link back to the source file
         """
+        logger = logging.getLogger(__name__)
+
         Path(config.content_dir, self.name).mkdir(exist_ok=True)
         link = Path(config.content_dir, self.name, "original")
         try:
             link.symlink_to(config.source_dir / self.source)
+            logger.debug(
+                f"Created link from {config.source_dir / self.source} to {link}"
+            )
         except FileExistsError:
             pass
         return link
@@ -68,4 +82,7 @@ class ImageRecord(KodakModel):
 
         :param config: Populated application configuration object
         """
-        Path(config.content_dir, self.name, "original").unlink(missing_ok=True)
+        logger = logging.getLogger(__name__)
+        link = Path(config.content_dir, self.name, "original")
+        link.unlink(missing_ok=True)
+        logger.debug(f"Removed link from {config.source_dir / self.source} to {link}")

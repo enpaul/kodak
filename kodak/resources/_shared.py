@@ -69,7 +69,7 @@ class KodakResource(flask_restful.Resource):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.logger = logging.getLogger()
+        self.logger = logging.getLogger(__name__)
 
     def options(
         self, *args, **kwargs  # pylint: disable=unused-argument
