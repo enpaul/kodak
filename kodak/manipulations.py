@@ -98,7 +98,8 @@ def crop(image: Image.Image, config: configuration.ManipConfig) -> Image.Image:
 
 
 def black_and_white(
-    image: Image.Image, config: configuration.ManipConfig
+    image: Image.Image,
+    config: configuration.ManipConfig,  # pylint: disable=unused-argument
 ) -> Image.Image:
     """Convert an image to full-depth black and white"""
     logger = logging.getLogger(__name__)

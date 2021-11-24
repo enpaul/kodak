@@ -47,7 +47,7 @@ class Checksum(NamedTuple):
 
         hasher = constructor()
         view = memoryview(bytearray(1024 * 1024))
-        with path.open("rb", buffering=0) as infile:
+        with Path(path).open("rb", buffering=0) as infile:
             for chunk in iter(lambda: infile.readinto(view), 0):  # type: ignore
                 hasher.update(view[:chunk])
 

@@ -24,7 +24,7 @@ class ImageManip(KodakResource):
             manip_config = flask.current_app.appconfig.manips[manip_name]
             format_ = constants.ImageFormat[format_name.upper()]
         except KeyError:
-            raise
+            raise RuntimeError("Manip or format doesn't exist") from None
 
         with database.interface.atomic():
             parent = database.ImageRecord.get(database.ImageRecord.name == image_name)
