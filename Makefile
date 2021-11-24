@@ -1,7 +1,7 @@
 # kodak makefile
 
-# You can set these variables from the command line
 PROJECT = kodak
+VERSION = $(shell poetry version --short)
 
 .PHONY: help
 # Put it first so that "make" without argument is like "make help"
@@ -36,10 +36,16 @@ wheel: prep ## Build Python binary distribution wheel package
 source: prep ## Build Python source distribution package
 	poetry build --format sdist
 
+image: prep
+	docker build . --tag $(PROJECT):$(VERSION)
+	docker image save $(PROJECT):$(VERSION) --output dist/$(PROJECT)-$(VERSION)-docker.tar.gz
+
+build: clean wheel source image; ## Build all distribution packages
+
 test: clean-tox prep ## Run the project testsuite(s)
 	poetry run tox
 
-publish: clean test wheel source ## Build and upload to pypi (requires $PYPI_API_KEY be set)
+publish: clean test build ## Build and upload to pypi (requires $PYPI_API_KEY be set)
 	@poetry publish --username __token__ --password $(PYPI_API_KEY)
 
 dev: ## Create local dev environment
