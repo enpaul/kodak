@@ -1,7 +1,8 @@
 import logging
 
 import peewee
-from PIL import Image
+import PIL.Image
+import PIL.ImageOps
 
 from kodak import configuration
 from kodak import constants
@@ -48,7 +49,8 @@ class ManipRecord(KodakModel):
             config.content_dir / parent.name / f"{manip.name}.{format_.name.lower()}"
         )
 
-        with Image.open(config.source_dir / parent.source) as image:
+        with PIL.Image.open(config.source_dir / parent.source) as image:
+            image = PIL.ImageOps.exif_transpose(image)
             if manip.scale.horizontal is not None or manip.scale.vertical is not None:
                 image = manipulations.scale(image, manip)
 
