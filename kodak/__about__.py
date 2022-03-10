@@ -2,7 +2,7 @@
 
 
 __title__ = "kodak"
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __authors__ = ["Ethan Paul <24588726+enpaul@users.noreply.github.com>"]
 __license__ = "MIT"
 __summary__ = "HTTP server for uploading images and generating thumbnails"
